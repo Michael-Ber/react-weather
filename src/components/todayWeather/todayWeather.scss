@@ -1,0 +1,33 @@
+.app-weather {
+    &__now {
+        display: flex;
+        justify-content: space-around;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 15px 25px 25px 25px;
+        background: linear-gradient(to top, #2719f0, #6055f1);
+        font-size: 18px;
+        font-weight: 400;
+        color: #fff;
+        border-radius: 10px;
+        span {
+            font-weight: 600;
+        }
+    }
+}
+
+.now-app-weather {
+    &__temp {
+        font-size: 32px;
+    }
+    &__feels {
+
+    }
+    &__pressure {
+
+    }
+    &__clouds {
+        text-transform: uppercase;
+    }
+}

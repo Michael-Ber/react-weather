@@ -1,0 +1,17 @@
+.app-weather {
+    &__header {
+        display: flex;
+        justify-content: center;
+        align-items: baseline;
+        gap: 30px;
+        font-size: 14px;
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+    &__sun {
+        span {
+            font-weight: 700;
+        }
+    }
+    
+}
