@@ -2,7 +2,7 @@ import Search from '../search/Search';
 import './header.scss';
 import sky from './sky.svg';
 
-const Header = () => {
+const Header = ({setCityProp}) => {
     
     return (
         <div className="app-header">
@@ -11,7 +11,7 @@ const Header = () => {
                     <img src={sky} alt="weather-icon" />
                 </div>
                 <p className="app-header__title">World Weather</p>
-                <Search />
+                <Search setCityProp={setCityProp}/>
             </div>
             
         </div>

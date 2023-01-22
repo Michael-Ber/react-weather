@@ -6,6 +6,7 @@
     height: 80px;
     background: linear-gradient(to bottom, #2719f0, #6055f1);
     padding: 0 100px;
+    z-index: 10000;
     &__wrapper {
         display: flex;
         align-items: center;

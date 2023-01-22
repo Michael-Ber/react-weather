@@ -5,17 +5,17 @@ import ErrorBoundary from "../errorBoundary/ErrorBoundary";
 
 import './mainPage.scss';
 
-const MainPage = () => {
+const MainPage = ({cityProp}) => {
     return (
         <div className="main-page">
             <ErrorBoundary>
-                <CityInfo />
+                <CityInfo cityProp={cityProp}/>
             </ErrorBoundary>
             <ErrorBoundary>
-                <TodayWeather />
+                <TodayWeather cityProp={cityProp}/>
             </ErrorBoundary>
             <ErrorBoundary>
-                <WeatherTable />
+                <WeatherTable cityProp={cityProp}/>
             </ErrorBoundary>
         </div>
     )

@@ -1,5 +1,7 @@
 .app-weather {
     &__now {
+        position: relative;
+        min-height: 80px;
         display: flex;
         justify-content: space-around;
         align-items: baseline;
@@ -20,12 +22,6 @@
 .now-app-weather {
     &__temp {
         font-size: 32px;
-    }
-    &__feels {
-
-    }
-    &__pressure {
-
     }
     &__clouds {
         text-transform: uppercase;

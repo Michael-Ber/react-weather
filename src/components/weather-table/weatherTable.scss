@@ -1,5 +1,6 @@
 .app-weather {
     &__content {
+        position: relative;
         margin-top: 50px;
     }
     &__table {
@@ -7,30 +8,76 @@
         border: 1px solid #999;
         padding: 10px;
         border-collapse: collapse;
+        th, td {
+            padding: 5px;
+        }
         .col-head {
             width: calc(100%/6);
             color: #000;
             border: 1px solid #000;
             font-size: 14px;
+            background-color: #eee;
             &_weekend {
                 color: rgb(231, 96, 96);
             }
         }
         .col-body {
             width: 4%;
-            font-size: 14px;
+            font-size: 16px;
             border: 1px solid #000;
             text-align: center;
-            padding: 2px;
+            background-color: #fff;
             &_side {
                 width: 12%;
+                text-align: right;
             }
+            &_dark {
+                background-color: rgb(204, 205, 205);
+            }
+        }
+        .col-time {
+            color: #000;
+            font-weight: 600;
+            &_dark {
+                color: #000;
+            }
+        }
+        .col-temp {
+            font-weight: 500;
+            &_very-cold {color: rgb(39, 5, 174)}
+            &_cold {color: rgb(45, 12, 236)}
+            &_middle {color: rgb(2, 58, 142)}
+            &_pos {color: rgb(248, 65, 65)}
+            &_hot {color: rgb(247, 32, 32)}
+            &_heat {color: rgb(244, 4, 4)}
+        }
+        .col-pres {
+            color: #000;
+            font-weight: 500;
+            &_high {
+                color: rgb(140, 0, 0);
+            }
+        }
+        .col-wind {
+            color: #000;
+            font-weight: 500;
+            &_strong {
+                color: rgb(140, 0, 0);
+                animation: opacity .9s ease-out infinite;
+            }
+        }
+        .col-wind-deg {
+            font-weight: 500;
+        }
+        .col-humidity {
+            font-weight: 500;
         }
         .tar {
             text-align: right;
         }
     }
     &__icon {
+        position: relative;
         width: 30px;
         height: 30px;
         margin: 0 auto;
@@ -39,6 +86,16 @@
             height: 100%;
             object-fit: cover;
         }
+        &:hover {
+            .tooltip {
+                visibility: visible;
+                opacity: 1;
+            }
+        }
     }
-    
+}
+
+@keyframes opacity {
+    from {opacity: 0}
+    to {opacity: 1}
 }

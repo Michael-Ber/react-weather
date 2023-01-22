@@ -4,27 +4,27 @@ import { v4 as uuidv4 } from 'uuid';
 const useWeatherService = () => {
     const {request, clearError, process, setProcess} = useHttp();
     const _apiKey = '60821d8da82efddc7040a50bc511c640';
-    const _url = `http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=${_apiKey}&lang=ru&units=metric&q=Bratsk`;
-    
-    const getCity = async() => {
-        const res = await request(_url);
+    const _url = `http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=${_apiKey}&lang=ru&units=metric&q=`;
+
+    const getCity = async(query="Братск") => {
+        const res = await request(`${_url}${query}`);
         return {
             id: res.city.id,
-            city: res.city.name,
+            city: modifyCityName(res.city.name),
             coord: {
                 lat: res.city.coord.lat,
                 lon: res.city.coord.lon
             },
-            sunrise: new Date(res.city.sunrise*1000),
-            sunset: new Date(res.city.sunset*1000)
+            timezone: res.city.timezone*1000,
+            sunrise: (res.city.sunrise*1000 + res.city.timezone*1000),
+            sunset: (res.city.sunset*1000 + res.city.timezone*1000)
         }
     };
 
-    const getWeather = async() => {
-        const res = await request(_url);
+    const getWeather = async(query="Братск") => {
+        const res = await request(`${_url}${query}`);
         return res.list.map(_transformData)
     }
-
     // const getInfo = async() => {
     //     const res = await request(_url);
     //     return {city: res.city, list: res.list};
@@ -75,4 +75,29 @@ const useWeatherService = () => {
     return {getCity, getWeather, process, setProcess, clearError}
 }
 
+const modifyCityName = (name) => {
+    let arr = name.split('');
+    let lastLiteral = arr.splice(-1, 1);
+    switch(lastLiteral.join('')) {
+        case 'й': 
+            // arr.splice(-2, 2);
+            let secondLiteral = arr.splice(-1, 1);
+            console.log(secondLiteral);
+            secondLiteral[0] === 'и' ? arr.push('ом'): arr.push('ее');
+            return arr.join('');
+        // case 'ей': 
+        //     // arr.splice(-2, 2);
+        //     arr.push('ее');
+        //     return arr.join('');
+        case 'а': 
+            arr.push('е');
+            return arr.join('');
+        case 'о':
+            arr.push(lastLiteral);
+            return arr.join('');
+        default: 
+            arr.push(lastLiteral, 'e');
+            return arr.join('')
+    } 
+}
 export default useWeatherService;

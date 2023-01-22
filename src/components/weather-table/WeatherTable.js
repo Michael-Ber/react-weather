@@ -1,6 +1,17 @@
-import { useEffect, useState, memo } from "react";
+import { useEffect, useState, memo, useCallback, useRef, createRef } from "react";
+import Spinner from "../spinner/Spinner";
+import Error from "../error/Error";
 import useWeatherService from "../../service/WeatherService";
-import Tooltip from "../tooltip/Tooltip";
+import {
+    FeelsCol, 
+    HumidityCol, 
+    PressureCol,
+    SkyCol,
+    TempCol,
+    TimeCol,
+    WindCol
+} from './cols/index';
+
 import './weatherTable.scss';
 
 const weekDays = {
@@ -28,158 +39,134 @@ const months = {
     11: 'Декабря',
 }
 
-const iconsPath = {
-    '03n': '03d',
-    '04n': '04d',
-    '09n': '09d',
-    '11n': '11d',
-    '13n': '13d',
-    '50n': '50d'
-};
-
-const WeatherTable = memo(() => {
+const WeatherTable = memo(({cityProp}) => {
     const [date, setDate] = useState(new Date());
     const [weatherArr, setWeatherArr] = useState([]);
-    const [show, setShow] = useState(false);
-    const [weather, setWeather] = useState('');
-    const [coord, setCoord] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const {getWeather, process, setProcess, clearError} = useWeatherService();
+    const {getWeather, process, setProcess, clearError} = useWeatherService(cityProp);
 
     useEffect(() => {
         onUpdateTime();
     }, [])
 
     useEffect(() => {
-        getWeather()
-            .then(res => setWeatherArr(res.filter(obj => {
-                return (new Date(obj.dt).getHours() === 14 || new Date(obj.dt).getHours() === 20 || new Date(obj.dt).getHours() === 2 || new Date(obj.dt).getHours() === 8)
-            })))
+        setError(false);
+        setLoading(true);
+        getWeather(cityProp)
+            .then(res => setWeatherArr(
+                res
+                    .filter(obj => {
+                        return (
+                            new Date(obj.dt).getHours() === 14 
+                            || new Date(obj.dt).getHours() === 20 
+                            || new Date(obj.dt).getHours() === 2 
+                            || new Date(obj.dt).getHours() === 8
+                        )
+                    })
+                    .map(item => (
+                        new Date(item.dt).getHours() === 20 || 
+                        new Date(item.dt).getHours() === 2 ||
+                        new Date(item.dt).getHours() === 8
+                        ) ? {...item, background: 'dark'}: item)))
             .then(() => setLoading(false))
-            .catch(() => setError(true))
-    }, [])
+            .catch(() => {setError(true); setLoading(false)})
+    }, [cityProp])
 
     const onUpdateTime = () => {
         return setDate(new Date());
     }
-    const setColClasses = (weekDay) => {
-         const a = weekDay > 6 ? weekDay - 7 : weekDay;
-        return (a > 0 && a < 6) ? 'col-head': 'col-head col-head_weekend';
-    }
 
-    const showToolTip = (e, show, title) => {
-        return <Tooltip show={show} title={title}/>
-    }
-    // const hideToolTip = (e) => {
-    //     console.log(e)
-    // }
+    const spinnerContent = loading && <Spinner />;
+    const errorContent = error && <Error />;
+    const content = (!loading && !error) && <View date={date} weatherArr={weatherArr}/>;
 
-    const actualWeekDay = (n) => weekDays[(date.getDay() + n) > 6 ? (date.getDay() + n) - 7: (date.getDay() + n)];
-    const actualDay = (n) => date.getDate() + n;   
-    const actualMonth = () => months[date.getMonth()];
-
-    console.log(weatherArr);
+    
     return (
         <div className="app-weather__content">
-            <Tooltip show={show} title={weather} coord={coord}/>
-            <table className="app-weather__table">
-                <thead>
-                    <tr className="row">
-                        <th scope="col" colSpan={3} className={setColClasses(date.getDay())}>
-                            Сегодня, {actualWeekDay(0)}, {actualDay(0)} {actualMonth()}
-                            
-                        </th>
-                        <th scope="col" colSpan={4} className={setColClasses(date.getDay()+1)}>
-                            Завтра, {actualWeekDay(1)}, {actualDay(1)} {actualMonth()}
-                        </th>
-                        <th scope="col" colSpan={4} className={setColClasses(date.getDay()+2)}>
-                            {actualWeekDay(2)}, {actualDay(2)} {actualMonth()}
-                        </th>
-                        <th scope="col" colSpan={4} className={setColClasses(date.getDay()+3)}>
-                            {actualWeekDay(3)}, {actualDay(3)} {actualMonth()}
-                        </th>
-                        <th scope="col" colSpan={4} className={setColClasses(date.getDay()+4)}>
-                            {actualWeekDay(4)}, {actualDay(4)} {actualMonth()}
-                        </th>
-                        <th scope="col" colSpan={4} className={setColClasses(date.getDay()+5)}>
-                            {actualWeekDay(5)}, {actualDay(5)} {actualMonth()}
-                        </th>
-                    </tr>
-
-                </thead>
-                <tbody>
-                    <tr className="row" >
-                        <td className="col-body col-body_side">
-                            Местное время
-                        </td>
-                        {weatherArr.map(item => {
-                            return (
-                                <td key={`${item.id}a`} className="col-body">{new Date(item.dt).getHours() < 10 ? `0${new Date(item.dt).getHours()}`: new Date(item.dt).getHours()}</td>
-                            )
-                        })}
-                    </tr>
-                    <tr>
-                        <td className="col-body">
-                            <p className="tar">Облачность, %</p>
-                        </td>
-                        {weatherArr.map(item => {
-                            return (
-                                <td key={item.id} className="col-body">
-                                    <div 
-                                        onMouseEnter={(e) => {
-                                                setShow(true);
-                                                setWeather(item.weather);
-                                                setCoord([e.clientX, e.clientY])
-                                            }
-                                        } 
-                                        onMouseLeave={(e) => setShow(false)}
-                                        className="app-weather__icon">
-                                        <img 
-                                            src={require(`../../resourses/icons/${Array.from(Object.keys(iconsPath)).includes(item.icon, 0) ? iconsPath[item.icon] : item.icon}.png`)} 
-                                            alt="weather icon"
-                                        />
-                                    </div>
-                                </td>
-                            )
-                        })}
-                        <td className="col-body">
-                            <p></p>
-                            <p></p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="col-body">
-                            Температура, &#8451;
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="col-body">
-                            Ощущается как, &#8451;
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="col-body">
-                            Давление, мм.рт.ст
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="col-body">
-                            <p className="tar">Ветер: скорость м/с</p>
-                            <p className="tar">порывы м/с</p>
-                            <p className="tar">направление</p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className="col-body">
-                            Влажность, %
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            {spinnerContent}
+            {errorContent}
+            {content}
         </div>
         
     )
 });
+
+const View = ({date, weatherArr}) => {
+    const setColClasses = (weekDay) => {
+        const a = weekDay > 6 ? weekDay - 7 : weekDay;
+        return (a > 0 && a < 6) ? 'col-head': 'col-head col-head_weekend';
+    }
+
+    const actualWeekDay = (n) => weekDays[(date.getDay() + n) > 6 ? (date.getDay() + n) - 7: (date.getDay() + n)];
+    const actualDay = (n) => date.getDate() + n;   
+    const actualMonth = () => months[date.getMonth()];
+    return (
+        <table className="app-weather__table">
+            <thead>
+                {/* формирование строки с днями недели, месяцем и числами */}
+                <tr className="row"> 
+                    {[...new Set(weatherArr.map(item => new Date(item.dt).getDate()))].map((item, i) => {
+                        let colspan = i === 0 ? 3 : 4;
+                        let today = i === 0 ? 'Сегодня, ' : i === 1 ? 'Завтра, ': null;
+                        return (
+                            <th key={i} scope="col" colSpan={colspan}  className={setColClasses(date.getDay()+i)}>
+                                {today}{actualWeekDay(i)}, {actualDay(i)} {actualMonth()}
+                                
+                            </th>
+                        )
+                    })}
+                </tr>
+
+            </thead>
+            <tbody>
+                <tr className="row" >
+                    <td className="col-body col-body_side">
+                        Местное время
+                    </td>
+                    {weatherArr.map(item => <TimeCol key={item.id} item={item}/>)}
+                </tr>
+                <tr>
+                    <td className="col-body col-body_side">
+                        <p className="tar">Облачность, %</p>
+                    </td>
+                    {weatherArr.map(item => <SkyCol key={`${item.id}a`} item={item} />)}
+                </tr>
+                <tr>
+                    <td className="col-body col-body_side">
+                        Температура, &#8451;
+                    </td>
+                    {weatherArr.map(item => <TempCol key={`${item.id}b`} item={item}/>)}
+                </tr>
+                <tr>
+                    <td className="col-body col-body_side">
+                        Ощущается как, &#8451;
+                    </td>
+                    {weatherArr.map(item => <FeelsCol key={`${item.id}c`} item={item}/>)}
+                </tr>
+                <tr>
+                    <td className="col-body col-body_side">
+                        Давление, мм.рт.ст
+                    </td>
+                    {weatherArr.map(item => <PressureCol key={`${item.id}d`} item={item}/>)}
+                </tr>
+                <tr>
+                    <td className="col-body col-body_side">
+                        <p className="tar">Ветер: скорость м/с</p>
+                        <p className="tar">порывы м/с</p>
+                        <p className="tar">направление</p>
+                    </td>
+                    {weatherArr.map(item => <WindCol key={`${item.id}e`} item={item}/>)}
+                </tr>
+                <tr>
+                    <td className="col-body col-body_side">
+                        Влажность, %
+                    </td>
+                    {weatherArr.map(item => <HumidityCol key={`${item.id}f`} item={item}/>)}
+                </tr>
+            </tbody>
+        </table>
+    )
+}
 
 export default WeatherTable;
