@@ -6,7 +6,7 @@ const useWeatherService = () => {
     const _apiKey = '60821d8da82efddc7040a50bc511c640';
     const _url = `http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=${_apiKey}&lang=ru&units=metric&q=`;
 
-    const getCity = async(query="Братск") => {
+    const getCity = async(query) => {
         const res = await request(`${_url}${query}`);
         return {
             id: res.city.id,
@@ -21,14 +21,10 @@ const useWeatherService = () => {
         }
     };
 
-    const getWeather = async(query="Братск") => {
+    const getWeather = async(query) => {
         const res = await request(`${_url}${query}`);
         return res.list.map(_transformData)
     }
-    // const getInfo = async() => {
-    //     const res = await request(_url);
-    //     return {city: res.city, list: res.list};
-    // }
 
     const _transformWindDirection = (deg) => {
         if(deg<20 || deg>=330) {
@@ -72,32 +68,29 @@ const useWeatherService = () => {
         }
 
     })
-    return {getCity, getWeather, process, setProcess, clearError}
+    const modifyCityName = (name) => {
+        let arr = name.split('');
+        let lastLiteral = arr.splice(-1, 1);
+        switch(lastLiteral.join('')) {
+            case 'й': 
+                // arr.splice(-2, 2);
+                let secondLiteral = arr.splice(-1, 1);
+                console.log(secondLiteral);
+                secondLiteral[0] === 'и' ? arr.push('ом'): arr.push('ее');
+                return arr.join('');
+            case 'а': 
+                arr.push('е');
+                return arr.join('');
+            case 'о':
+                arr.push(lastLiteral);
+                return arr.join('');
+            default: 
+                arr.push(lastLiteral, 'e');
+                return arr.join('')
+        } 
+    }
+    return {getCity, getWeather, process, setProcess, clearError, modifyCityName}
 }
 
-const modifyCityName = (name) => {
-    let arr = name.split('');
-    let lastLiteral = arr.splice(-1, 1);
-    switch(lastLiteral.join('')) {
-        case 'й': 
-            // arr.splice(-2, 2);
-            let secondLiteral = arr.splice(-1, 1);
-            console.log(secondLiteral);
-            secondLiteral[0] === 'и' ? arr.push('ом'): arr.push('ее');
-            return arr.join('');
-        // case 'ей': 
-        //     // arr.splice(-2, 2);
-        //     arr.push('ее');
-        //     return arr.join('');
-        case 'а': 
-            arr.push('е');
-            return arr.join('');
-        case 'о':
-            arr.push(lastLiteral);
-            return arr.join('');
-        default: 
-            arr.push(lastLiteral, 'e');
-            return arr.join('')
-    } 
-}
+
 export default useWeatherService;

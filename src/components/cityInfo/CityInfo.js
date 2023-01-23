@@ -27,7 +27,7 @@ const CityInfo = ({cityProp}) => {
     const spinnerContent = loading && <Spinner />;
     const errorContent = error && <Error />;
     const content = (!loading && !error) && View(city);
-
+    console.log(city);
     return (
         <div className="app-weather">
             {spinnerContent}

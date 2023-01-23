@@ -43,10 +43,10 @@
             }
         }
         .col-temp {
-            font-weight: 500;
-            &_very-cold {color: rgb(39, 5, 174)}
-            &_cold {color: rgb(45, 12, 236)}
-            &_middle {color: rgb(2, 58, 142)}
+            font-weight: 700;
+            &_very-cold {color: rgb(0, 0, 174)}
+            &_cold {color: rgb(71, 45, 175)}
+            &_middle {color: #2b63a0}
             &_pos {color: rgb(248, 65, 65)}
             &_hot {color: rgb(247, 32, 32)}
             &_heat {color: rgb(244, 4, 4)}

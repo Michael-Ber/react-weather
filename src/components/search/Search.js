@@ -1,15 +1,21 @@
 
 import { useFormik } from 'formik';
+import { Link, useNavigate } from 'react-router-dom';
+import useWeatherService from '../../service/WeatherService';
 import './search.scss';
 import search from './search.svg';
 
+
 const Search = ({setCityProp}) => {
+    const nav = useNavigate();
+    const {modifyCityName} = useWeatherService();
     const formik = useFormik({
         initialValues: {
             city: ''
         },
         onSubmit: values => {
             setCityProp(values.city);
+            nav(`/Погода_в_${modifyCityName(values.city)}`);
             values.city = '';
         }
     })
