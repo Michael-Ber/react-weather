@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import {BrowserRouter as Router, Routes, Route, useNavigate, useParams} from 'react-router-dom'
 import Header from '../header/Header';
 import MainPage from '../pages/MainPage';
+import WeatherPage from '../pages/WeatherPage';
 import useWeatherService from '../../service/WeatherService';
 import Page404 from '../pages/Page404';
 import './app.scss';
@@ -24,7 +25,7 @@ function App() {
 						<Routes>
 							<Route 
 								path={`/Погода_в_${modifyCityName(cityProp)}`} 
-								element={<MainPage cityProp={cityProp}/>} />
+								element={<WeatherPage cityProp={cityProp}/>} />
 							<Route path='*' element={<Page404 defPage={`/Погода_в_${modifyCityName(cityProp)}`}/>} />
 						</Routes>
 					</div>

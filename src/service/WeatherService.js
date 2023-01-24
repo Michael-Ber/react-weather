@@ -5,6 +5,7 @@ const useWeatherService = () => {
     const {request, clearError, process, setProcess} = useHttp();
     const _apiKey = '60821d8da82efddc7040a50bc511c640';
     const _url = `http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=${_apiKey}&lang=ru&units=metric&q=`;
+    // const _url1 = `http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=${_apiKey}&lang=ru&units=metric&q=af`;
 
     const getCity = async(query) => {
         const res = await request(`${_url}${query}`);
@@ -26,6 +27,19 @@ const useWeatherService = () => {
         return res.list.map(_transformData)
     }
 
+    const getCountries = async() => {
+        const res = await request('http://localhost:3004/data');
+        return res;
+    }
+
+    const patchCountries = async(body, id) => {
+        const res = await request(`http://localhost:3004/data/${id}`, 
+            'PATCH',
+            JSON.stringify(body),
+            {'Content-Type': 'application/json'}
+        )
+        return res
+    }
     const _transformWindDirection = (deg) => {
         if(deg<20 || deg>=330) {
             return 'С' 
@@ -89,7 +103,7 @@ const useWeatherService = () => {
                 return arr.join('')
         } 
     }
-    return {getCity, getWeather, process, setProcess, clearError, modifyCityName}
+    return {getCity, getWeather, process, setProcess, clearError, modifyCityName, getCountries, patchCountries}
 }
 
 
