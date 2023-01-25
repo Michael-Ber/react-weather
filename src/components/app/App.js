@@ -20,6 +20,7 @@ function App() {
 	// useEffect(() => {
 	// 	nav(`/Погода_в_${modifyCityName(cityProp)}`)
 	// }, [])
+	const countryAbbr = country && Object.keys(...abbr.filter(elem => Object.values(elem)[0] === country))[0];
 	return (
 		// <Router>
 			<Context.Provider value={abbr}>
@@ -33,7 +34,7 @@ function App() {
 									element={<WeatherPage cityProp={cityProp}/>} />
 								<Route 
 									path={`/${country}`}
-									element={<CountryPage country={country}/>}/>
+									element={<CountryPage countryAbbr={countryAbbr}/>}/>
 								<Route 
 									path="/"
 									element={<MainPage setCountry={setCountry}/>}/>

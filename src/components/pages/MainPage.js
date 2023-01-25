@@ -13,7 +13,6 @@ const MainPage = ({setCountry}) => {
     const abbr = useContext(Context);
     const arr = abbr.map(item => Array.from(Object.values(item))[0]).sort((a,b) => a > b ? 1 : -1);
     const upperLiteralCountry = [...new Set(arr.map(item => item[0]))];
-    
     const content = upperLiteralCountry.map((item, i) => {
         return (
             <li key={i} className="main-page__item item-main-page">
@@ -23,7 +22,11 @@ const MainPage = ({setCountry}) => {
                         .filter(country => country[0] === item)
                         .map((item, j) => 
                             <li className="item-main-page__subitem" key={j}> {/*Country*/}
-                                <Link onClick={() => setCountry(Object.keys(abbr)[abbr[abbr.indexOf(Object.values(abbr)[item], 0)]])} to={`/${item}`} className="item-main-page__link">
+                                <Link 
+                                    onClick={
+                                        () => setCountry(item)} 
+                                    to={`/${item}`} 
+                                    className="item-main-page__link">
                                     {item}
                                 </Link>
                             </li>
