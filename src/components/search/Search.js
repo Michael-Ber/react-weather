@@ -15,7 +15,7 @@ const Search = ({setCityProp}) => {
         },
         onSubmit: values => {
             setCityProp(values.city);
-            nav(`/Погода_в_${modifyCityName(values.city)}`);
+            // nav(`/Погода_в_${modifyCityName(values.city)}`);
             values.city = '';
         }
     })

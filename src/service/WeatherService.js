@@ -27,10 +27,12 @@ const useWeatherService = () => {
         return res.list.map(_transformData)
     }
 
-    const getCountries = async() => {
+    const getCountries = async(countryAbbr) => {
         const res = await request('http://localhost:3004/data');
-        return res;
+        return res.filter(item => item.country === countryAbbr)
     }
+
+    
 
     const patchCountries = async(body, id) => {
         const res = await request(`http://localhost:3004/data/${id}`, 

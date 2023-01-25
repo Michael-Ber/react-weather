@@ -1,3 +1,44 @@
 .main-page {
     position: relative;
+    &__list {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: flex-start;
+        max-height: 3000px;
+        gap: 20px;
+    }
+    &__item {
+        width: 280px;
+        list-style-type: none;
+    }
+    
+}
+.item-main-page {
+    &__header {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 20px
+    }
+    &__sublist {
+        padding-bottom: 20px;
+    }
+    &__subitem {
+        list-style-type: none;
+        
+        
+        &:nth-child(n):not(:last-child) {
+            margin-bottom: 10px;
+        }
+        
+    }
+    &__link {
+        font-size: 16px;
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+            
+        }
+    }
 }

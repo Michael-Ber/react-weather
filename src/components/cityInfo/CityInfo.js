@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import useWeatherService from '../../service/WeatherService';
 import Spinner from '../spinner/Spinner';
 import Error from '../error/Error';
-// import { countriesAbbr as abbr} from '../../bd/countriesAbbrToRu';
+import { countriesAbbr as abbr} from '../../bd/countriesAbbrToRu';
 import setContent from '../../utils/setContent';
 
 import './cityInfo.scss';
@@ -13,7 +13,7 @@ const CityInfo = ({cityProp}) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const {getCity, clearError, setProcess, process, getCountries, patchCountries} = useWeatherService();
-    
+    console.log(Object.keys(abbr).length);
 
     useEffect(() => {
         // clearError();
@@ -24,23 +24,13 @@ const CityInfo = ({cityProp}) => {
             .then(() => setLoading(false))
             .catch(() => {setError(true); setLoading(false)})
 			// .then(() => setProcess('confirmed'))
-        getCountries()
-            .then(res => res.sort((a,b) => a.country > b.country ? 1: -1).filter(item => item.country !== ''))
-            // .then(res => res.map(item => ({...item, countryFull: abbr[item.country]
-                
-            // })))
-            .then(res => console.log([...new Set(res.map(item => item.country))]))
-        // patchCountries({
-        //     "country": "US",
-        // }, 102908598)
-        // .then(res => console.log(res))
+        // getCountries()
+        //     .then(res => res.filter(item => item.country !== '').sort((a,b) => a.country > b.country ? 1 : -1))
+        //     .then (res => console.log([...new Set(res.map(item => item.country))]))
+        //     .catch(e => console.log(e))
+            
 
     }, [cityProp])
-
-    async function customSort(arr) {
-        const res = await arr.sort((a,b) => a.country < b.country);
-        return res
-    }
 
     const spinnerContent = loading && <Spinner />;
     const errorContent = error && <Error />;
