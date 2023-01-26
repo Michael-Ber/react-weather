@@ -1,0 +1,56 @@
+.country {
+    &__title {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    &__list {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 40px;
+    }
+    &__item {
+        position: relative;
+        width: 150px;
+        list-style-type: none;
+        
+    }
+}
+.item-country {
+    &__header {
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 20px
+    }
+    &__sublist {
+        max-height: 300px;
+        padding-bottom: 20px;
+        overflow-x: hidden;
+        overflow-y: hidden;
+        &_active {
+            overflow-y: scroll;
+        }
+    }
+    &__subitem {
+        list-style-type: none;
+        &:nth-child(n):not(:last-child) {
+            margin-bottom: 10px;
+        }
+    }
+    &__link {
+        font-size: 16px;
+        text-decoration: none;
+        &:hover {
+            text-decoration: underline;
+            
+        }
+    }
+    &__more {
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        color: blue;
+        font-size: 16px;
+        cursor: pointer;
+        z-index: 1000;
+    }
+}

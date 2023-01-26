@@ -1,12 +1,11 @@
-import CityInfo from "../cityInfo/CityInfo";
-import TodayWeather from "../todayWeather/TodayWeather";
-import WeatherTable from "../weather-table/WeatherTable";
-import ErrorBoundary from "../errorBoundary/ErrorBoundary";
+import CityInfo from "../../cityInfo/CityInfo";
+import TodayWeather from "../../todayWeather/TodayWeather";
+import WeatherTable from "../../weather-table/WeatherTable";
+import ErrorBoundary from "../../errorBoundary/ErrorBoundary";
 import { useEffect, useState } from "react";
 import { useNavigate, redirect, useLocation } from "react-router-dom";
-import useForceUpdate from "../../hooks/useForceUpdate.hook";
+import useForceUpdate from "../../../hooks/useForceUpdate.hook";
 
-import './mainPage.scss';
 
 const WeatherPage = ({cityProp, match}) => {
     const nav = useNavigate();
