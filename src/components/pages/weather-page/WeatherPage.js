@@ -2,23 +2,21 @@ import CityInfo from "../../cityInfo/CityInfo";
 import TodayWeather from "../../todayWeather/TodayWeather";
 import WeatherTable from "../../weather-table/WeatherTable";
 import ErrorBoundary from "../../errorBoundary/ErrorBoundary";
-import { useEffect, useState } from "react";
-import { useNavigate, redirect, useLocation } from "react-router-dom";
-import useForceUpdate from "../../../hooks/useForceUpdate.hook";
+import { useParams, useNavigate } from "react-router-dom";
 
 
-const WeatherPage = ({cityProp, match}) => {
-    const nav = useNavigate();
+const WeatherPage = () => {
+    const {cityName} = useParams();
     return (
         <div className="main-page">
             <ErrorBoundary>
-                <CityInfo cityProp={cityProp}/>
+                <CityInfo cityProp={cityName}/>
             </ErrorBoundary>
             <ErrorBoundary>
-                <TodayWeather cityProp={cityProp}/>
+                <TodayWeather cityProp={cityName}/>
             </ErrorBoundary>
             <ErrorBoundary>
-                <WeatherTable cityProp={cityProp}/>
+                <WeatherTable cityProp={cityName}/>
             </ErrorBoundary>
         </div>
     )

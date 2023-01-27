@@ -5,17 +5,19 @@ const useWeatherService = () => {
     const {request, clearError, process, setProcess} = useHttp();
     const _apiKey = '60821d8da82efddc7040a50bc511c640';
     const _url = `http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=${_apiKey}&lang=ru&units=metric&q=`;
-    // const _url1 = `http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=${_apiKey}&lang=ru&units=metric&q=af`;
 
     const getCity = async(query) => {
         const res = await request(`${_url}${query}`);
+        console.log(res);
         return {
             id: res.city.id,
-            city: modifyCityName(res.city.name),
+            city: res.city.name,
             coord: {
                 lat: res.city.coord.lat,
                 lon: res.city.coord.lon
             },
+            list: res.list.map(item => ({dt: item.dt*1000, temp: Math.floor(item.main.temp), timezone: res.city.timezone})).filter(item => new Date(new Date(item.dt).getTime() + item.timezone).getUTCDate() === new Date(new Date().getTime() + item.timezone).getUTCDate()),
+            country: res.city.country,
             timezone: res.city.timezone*1000,
             sunrise: (res.city.sunrise*1000 + res.city.timezone*1000),
             sunset: (res.city.sunset*1000 + res.city.timezone*1000)
@@ -109,13 +111,16 @@ const useWeatherService = () => {
                 // arr.splice(-2, 2);
                 let secondLiteral = arr.splice(-1, 1);
                 console.log(secondLiteral);
-                secondLiteral[0] === 'и' ? arr.push('ом'): arr.push('ее');
+                (secondLiteral[0] === 'и' || secondLiteral[0] === 'ы') ? arr.push('ом'): arr.push('ее');
                 return arr.join('');
             case 'а': 
                 arr.push('е');
                 return arr.join('');
             case 'о':
                 arr.push(lastLiteral);
+                return arr.join('');
+            case 'я': 
+                arr.push('е');
                 return arr.join('');
             default: 
                 arr.push(lastLiteral, 'e');

@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Context } from '../../service/Context';
-import {BrowserRouter as Router, Routes, Route, useNavigate, useLocation} from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { countriesAbbr as abbr} from '../../bd/countriesAbbrToRu';
+import ErrorBoundary from '../errorBoundary/ErrorBoundary';
 import Header from '../header/Header';
 import MainPage from '../pages/main-page/MainPage';
 import WeatherPage from '../pages/weather-page/WeatherPage';
@@ -16,7 +17,6 @@ function App() {
 	// const [country, setCountry] = useState();
 	// const [city, setCity] = useState('');
 	const {modifyCityName} = useWeatherService();
-	const nav = useNavigate();
 	
 	// useEffect(() => {
 	// 	// nav(`/Погода_в_${modifyCityName(cityProp)}`)
@@ -29,22 +29,21 @@ function App() {
 		// <Router>
 			<Context.Provider value={abbr}>
 				<div className="app">
-					<Header setCityProp={setCityProp}/>
+					<ErrorBoundary>
+						<Header setCityProp={setCityProp}/>
+					</ErrorBoundary>
 					<div className="app-content">
 						<div className="container">
 							<Routes>
-								{/* <Route 
-									path={`/${country}/${cityProp}`} 
-									element={<WeatherPage cityProp={cityProp}/>} /> */}
+								<Route 
+									path={`/:countryName/:cityName`} 
+									element={<WeatherPage/>} />
 								<Route 
 									path={'/:countryName'}
 									element={<CountryPage/>}/>
-									{/* element={<CountryPage setCityProp={setCityProp} countryAbbr={countryAbbr}/>}/> */}
 								<Route 
 									path="/"
-									// element={<MainPage setCountry={setCountry}/>}/>
 									element={<MainPage/>}/>
-
 								<Route path='*' element={<Page404 defPage={`/Погода_в_${modifyCityName(cityProp)}`}/>} />
 							</Routes>
 						</div>

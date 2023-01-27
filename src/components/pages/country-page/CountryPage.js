@@ -1,25 +1,30 @@
-import { useContext, useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation, Link, useParams } from "react-router-dom";
 import { Context } from "../../../service/Context";
 import useWeatherService from "../../../service/WeatherService";
-import useForceUpdate from "../../../hooks/useForceUpdate.hook";
+import Spinner from "../../spinner/Spinner";
+import Error from "../../error/Error";
 
 import './countryPage.scss';
 
 const CountryPage = () => {
     const [cities, setCities] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
     const abbr = useContext(Context);
     const {getCountries} = useWeatherService();
     const {pathname} = useLocation();
     const nameWithoutSlash = decodeURI(pathname).slice(1, decodeURI(pathname).length);
     let {countryName} = useParams();
-    console.log(countryName);
+    const countryAbbr = countryName && Object.keys(...abbr.filter(elem => Object.values(elem)[0] === countryName))[0];
 
-    // useEffect(() => {
-    //     getCountries(countryAbbr)
-    //         .then(res => setCities(res))
-    //         .catch(e => console.log(e));
-    // }, [])
+    useEffect(() => {
+        setError(false);
+        getCountries(countryAbbr)
+            .then(res => setCities(res))
+            .then(() => setLoading(false))
+            .catch(eer => {setError(true); console.log(eer)});
+    }, [])
 
     const addActive = (e) => {
         switch(e.target.classList.value) {
@@ -39,12 +44,14 @@ const CountryPage = () => {
     }
 
     // console.log('render');
-    const content = cities.map((arr, i) => {
+    const spinner = (loading && !error) ? <Spinner /> : null;
+    const errorMessage = error ? <Error /> : null;
+    const content = (!loading && !error) && cities.map((arr, i) => {
         return (
             <li 
                 key={i}
                 className="country__item item-country">
-                <p className="item-country__header">{arr[0].name[0]}</p> {/*First arr item -> First literal of name */}
+                <p className="item-country__header">{arr.length > 0 && arr[0].name[0]}</p> {/*First arr item -> First literal of name */}
                 <ul 
                     onMouseEnter={(e) => addActive(e)} 
                     onMouseLeave={(e) => removeActive(e)} 
@@ -52,12 +59,11 @@ const CountryPage = () => {
                     {arr.map((obj, j) => {
                         return (
                             <li key={j} className="item-country__subitem">
-                                {/* <Link
-                                    onClick={() => setCityProp(obj.name)}
-                                    to={`${pathname}/${obj.name}`}
+                                <Link
+                                    to={`${decodeURI(pathname)}/${obj.name}`}
                                     className="item-country__link">
                                     {obj.name}
-                                </Link> */}
+                                </Link>
                             </li>
                         )
                     })}
@@ -68,8 +74,10 @@ const CountryPage = () => {
 
     return (
         <div className="country">
-            <h1 className="country__title">{nameWithoutSlash}</h1>
+            <h1 className="country__title">{countryName}</h1>
             <ul className="country__list">
+                {spinner}
+                {error}
                 {content}
             </ul>
         </div>

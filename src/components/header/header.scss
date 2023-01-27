@@ -3,13 +3,13 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 80px;
+    height: 90px;
     background: linear-gradient(to bottom, #2719f0, #6055f1);
-    padding: 0 100px;
+    padding: 20px 100px 0 100px;
     z-index: 10000;
     &__wrapper {
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         height: 100%;
     }
     &__icon {

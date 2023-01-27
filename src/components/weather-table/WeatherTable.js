@@ -1,7 +1,8 @@
-import { useEffect, useState, memo, useCallback, useRef, createRef } from "react";
+import { useEffect, useState, memo } from "react";
 import Spinner from "../spinner/Spinner";
 import Error from "../error/Error";
 import useWeatherService from "../../service/WeatherService";
+import { changeDayMonth, changeWeek } from "../../utils/changeDayWeekMonth";
 import {
     FeelsCol, 
     HumidityCol, 
@@ -13,31 +14,6 @@ import {
 } from './cols/index';
 
 import './weatherTable.scss';
-
-const weekDays = {
-    0: 'Вс',
-    1: 'Пн',
-    2: 'Вт',
-    3: 'Ср',
-    4: 'Чт',
-    5: 'Пт',
-    6: 'Сб'
-};
-
-const months = {
-    0: 'Января',
-    1: 'Февраля',
-    2: 'Марта',
-    3: 'Апреля',
-    4: 'Мая',
-    5: 'Июня',
-    6: 'Июля',
-    7: 'Августа',
-    8: 'Сентября',
-    9: 'Октября',
-    10: 'Ноября',
-    11: 'Декабря',
-}
 
 const WeatherTable = memo(({cityProp}) => {
     const [date, setDate] = useState(new Date());
@@ -68,7 +44,10 @@ const WeatherTable = memo(({cityProp}) => {
                         new Date(item.dt).getHours() === 20 || 
                         new Date(item.dt).getHours() === 2 ||
                         new Date(item.dt).getHours() === 8
-                        ) ? {...item, background: 'dark'}: item)))
+                        ) ? {...item, background: 'dark'}: item
+                    )
+                )
+            )
             .then(() => setLoading(false))
             .catch(() => {setError(true); setLoading(false)})
     }, [cityProp])
@@ -98,9 +77,10 @@ const View = ({date, weatherArr}) => {
         return (a > 0 && a < 6) ? 'col-head': 'col-head col-head_weekend';
     }
 
-    const actualWeekDay = (n) => weekDays[(date.getDay() + n) > 6 ? (date.getDay() + n) - 7: (date.getDay() + n)];
-    const actualDay = (n) => date.getDate() + n;   
-    const actualMonth = () => months[date.getMonth()];
+    const actualWeekDay = (n) => changeWeek(date, n);
+    const actualDay = (n) => changeDayMonth(date, n, 'day');  
+    const actualMonth = (m) => changeDayMonth(date, m, 'month');
+
     return (
         <table className="app-weather__table">
             <thead>
@@ -111,7 +91,7 @@ const View = ({date, weatherArr}) => {
                         let today = i === 0 ? 'Сегодня, ' : i === 1 ? 'Завтра, ': null;
                         return (
                             <th key={i} scope="col" colSpan={colspan}  className={setColClasses(date.getDay()+i)}>
-                                {today}{actualWeekDay(i)}, {actualDay(i)} {actualMonth()}
+                                {today}{actualWeekDay(i)}, {actualDay(i)} {actualMonth(i)}
                                 
                             </th>
                         )

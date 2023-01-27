@@ -3,9 +3,8 @@
     flex: 1 0 auto;
     &__icon {
         position: absolute;
-        top: 50%;
+        top: 10px;
         left: 5px;
-        transform: translate(0, -50%);
         width: 25px;
         height: 25px;
         img {
@@ -20,5 +19,8 @@
         font-size: 18px;
         border: none;
         border-radius: 5px;
+    }
+    &__error {
+        color: rgb(255, 131, 131);
     }
 }

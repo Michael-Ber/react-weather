@@ -1,13 +1,7 @@
-import CityInfo from "../../cityInfo/CityInfo";
-import TodayWeather from "../../todayWeather/TodayWeather";
-import WeatherTable from "../../weather-table/WeatherTable";
-import CountryPage from "../country-page/CountryPage";
 import ErrorBoundary from "../../errorBoundary/ErrorBoundary";
-import Page404 from "../404-page/Page404";
 import { Context } from "../../../service/Context";
-import { useEffect, useState, useContext } from "react";
-import { useNavigate, redirect, useLocation, Link, Route, useMatch, Routes } from "react-router-dom";
-import useForceUpdate from "../../../hooks/useForceUpdate.hook";
+import { useContext } from "react";
+import { Link, useMatch, useLocation } from "react-router-dom";
 
 import './mainPage.scss';
 
@@ -16,7 +10,7 @@ const MainPage = () => {
     const arr = abbr.map(item => Array.from(Object.values(item))[0]).sort((a,b) => a > b ? 1 : -1);
     const upperLiteralCountry = [...new Set(arr.map(item => item[0]))];
     const match = useMatch('/');
-    
+    console.log(useLocation());
     const content = upperLiteralCountry.map((item, i) => {
         return (
             <li key={i} className="main-page__item item-main-page">
