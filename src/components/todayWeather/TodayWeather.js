@@ -18,7 +18,6 @@ const TodayWeather = ({cityProp}) => {
         setLoading(true);
         getWeather(cityProp)
 			.then(res => {setDay(res[0]); return res})
-            .then(res => console.log(res))
             .then(() => setLoading(false))
             .catch(() => {setError(true); setLoading(false)})
 			// .then(() => setProcess('confirmed'))

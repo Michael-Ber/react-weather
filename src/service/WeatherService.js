@@ -8,7 +8,6 @@ const useWeatherService = () => {
 
     const getCity = async(query) => {
         const res = await request(`${_url}${query}`);
-        console.log(res);
         return {
             id: res.city.id,
             city: res.city.name,
@@ -44,6 +43,7 @@ const useWeatherService = () => {
         )
         return res
     }
+
     const _transformWindDirection = (deg) => {
         if(deg<20 || deg>=330) {
             return 'С' 
@@ -110,7 +110,6 @@ const useWeatherService = () => {
             case 'й': 
                 // arr.splice(-2, 2);
                 let secondLiteral = arr.splice(-1, 1);
-                console.log(secondLiteral);
                 (secondLiteral[0] === 'и' || secondLiteral[0] === 'ы') ? arr.push('ом'): arr.push('ее');
                 return arr.join('');
             case 'а': 

@@ -14,7 +14,6 @@ const Search = () => {
 
     const validateInput = (value) => {
         let error;
-        console.log(value);
         if(!value) {
             error = 'Введите название города'
         } else if(value.match(/[A-Z]*[a-z]*[А-Я]*[а-я]*/)[0] === '') {

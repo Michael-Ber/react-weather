@@ -14,19 +14,10 @@ import './app.scss';
 
 function App() {
 	const [cityProp, setCityProp] = useState('Братск');
-	// const [country, setCountry] = useState();
-	// const [city, setCity] = useState('');
 	const {modifyCityName} = useWeatherService();
 	
-	// useEffect(() => {
-	// 	// nav(`/Погода_в_${modifyCityName(cityProp)}`)
-	// 	setCountry(decodeURI(pathname).slice(1, decodeURI(pathname).length))
-	// }, [pathname])
 	
-	// console.log(country);
-	// const countryAbbr = country && Object.keys(...abbr.filter(elem => Object.values(elem)[0] === country))[0];
 	return (
-		// <Router>
 			<Context.Provider value={abbr}>
 				<div className="app">
 					<ErrorBoundary>
@@ -48,9 +39,9 @@ function App() {
 							</Routes>
 						</div>
 					</div>
+					
 				</div>
 			</Context.Provider>
-		// </Router>
 		
 	);
 }

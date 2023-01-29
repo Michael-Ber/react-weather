@@ -1,19 +1,29 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import useWeatherService from '../../service/WeatherService';
 import Spinner from '../spinner/Spinner';
 import Error from '../error/Error';
-import { countriesAbbr as abbr} from '../../bd/countriesAbbrToRu';
+import { Context } from '../../service/Context';
 import setContent from '../../utils/setContent';
 
 import './cityInfo.scss';
 
 
-const CityInfo = ({cityProp}) => {
+const CityInfo = ({cityProp, setLocStor}) => {
     const [city, setCity] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const {getCity, modifyCityName, clearError, setProcess, process, getCountries, patchCountries} = useWeatherService();
+    const [earlyCities, setEalryCities] = useState([]);
+    const countriesAbbr = useContext(Context);
+    const {getCity, modifyCityName, clearError, setProcess, process, getCountries} = useWeatherService();
 
+    useEffect(() => {
+        earlyCities.map(item => localStorage.setItem(item.city, JSON.stringify({
+            country: item.country,
+            id: item.id, 
+            temp: item.list[0].temp
+        })))
+    }, [earlyCities])
+    
     useEffect(() => {
         // clearError();
         setError(false);
@@ -21,11 +31,34 @@ const CityInfo = ({cityProp}) => {
         getCity(cityProp)
 			.then(res => {setCity(res); return res})
             .then(res => {
-                localStorage.setItem(res.city, res.list[0].temp)
-                console.log(localStorage.length);
+                
+                if(localStorage.length < 4) {
+                    localStorage.setItem(res.city, JSON.stringify({
+                        temp: res.list[0].temp,
+                        id: res.id,
+                        country: countriesAbbr.filter(item => Object.keys(item)[0] === res.country)[0][res.country]
+                    }));
+                }else {
+                    if(Object.values(localStorage).filter(item => JSON.parse(item).id === res.id).length !== 0) {
+                        console.log('nothing to do here');
+                    }else {
+                            const firstKey = Object.keys(localStorage)[0];
+                            console.log(firstKey);
+                            localStorage.removeItem(firstKey);
+                            localStorage.setItem(res.city, JSON.stringify({
+                                temp: res.list[0].temp, 
+                                id: res.id,
+                                country: countriesAbbr.filter(item => Object.keys(item)[0] === res.country)[0][res.country]
+                            }));
+                        
+                        
+                    }
+                }
+                
             })
+            .then(() => console.log(localStorage))
             .then(() => setLoading(false))
-            .catch(() => {setError(true); setLoading(false)})
+            .catch((e) => {setError(true); setLoading(false); console.log(e)})
             
 
     }, [cityProp])

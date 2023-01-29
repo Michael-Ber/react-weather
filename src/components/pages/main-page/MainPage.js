@@ -10,7 +10,6 @@ const MainPage = () => {
     const arr = abbr.map(item => Array.from(Object.values(item))[0]).sort((a,b) => a > b ? 1 : -1);
     const upperLiteralCountry = [...new Set(arr.map(item => item[0]))];
     const match = useMatch('/');
-    console.log(useLocation());
     const content = upperLiteralCountry.map((item, i) => {
         return (
             <li key={i} className="main-page__item item-main-page">
