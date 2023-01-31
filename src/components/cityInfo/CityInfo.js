@@ -3,69 +3,49 @@ import useWeatherService from '../../service/WeatherService';
 import Spinner from '../spinner/Spinner';
 import Error from '../error/Error';
 import { Context } from '../../service/Context';
-import setContent from '../../utils/setContent';
+import { _modifyCityName } from '../../utils';
 
 import './cityInfo.scss';
 
 
-const CityInfo = ({cityProp, setLocStor}) => {
-    const [city, setCity] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
-    const [earlyCities, setEalryCities] = useState([]);
+const CityInfo = ({city, setCityCoord, loading, error}) => {
+    const [prevCity, setPrevCity] = useState({});
     const countriesAbbr = useContext(Context);
-    const {getCity, modifyCityName, clearError, setProcess, process, getCountries} = useWeatherService();
+    const {getCity, clearError, setProcess, process, getCountries} = useWeatherService();
 
-    useEffect(() => {
-        earlyCities.map(item => localStorage.setItem(item.city, JSON.stringify({
-            country: item.country,
-            id: item.id, 
-            temp: item.list[0].temp
-        })))
-    }, [earlyCities])
+    console.log(city);
+    
     
     useEffect(() => {
-        // clearError();
-        setError(false);
-        setLoading(true);
-        getCity(cityProp)
-			.then(res => {setCity(res); return res})
-            .then(res => {
-                
-                if(localStorage.length < 4) {
-                    localStorage.setItem(res.city, JSON.stringify({
-                        temp: res.list[0].temp,
-                        id: res.id,
-                        country: countriesAbbr.filter(item => Object.keys(item)[0] === res.country)[0][res.country]
-                    }));
-                }else {
-                    if(Object.values(localStorage).filter(item => JSON.parse(item).id === res.id).length !== 0) {
-                        console.log('nothing to do here');
-                    }else {
-                            const firstKey = Object.keys(localStorage)[0];
-                            console.log(firstKey);
-                            localStorage.removeItem(firstKey);
-                            localStorage.setItem(res.city, JSON.stringify({
-                                temp: res.list[0].temp, 
-                                id: res.id,
-                                country: countriesAbbr.filter(item => Object.keys(item)[0] === res.country)[0][res.country]
-                            }));
-                        
-                        
-                    }
-                }
-                
-            })
-            .then(() => console.log(localStorage))
-            .then(() => setLoading(false))
-            .catch((e) => {setError(true); setLoading(false); console.log(e)})
+        setPrevCity(city);
+        setCityCoord(city.coord);
+        if(localStorage.length < 5 && city.hasOwnProperty('id')) {
+            localStorage.setItem(city.city.toLowerCase(), JSON.stringify({
+                temp: city.list[0].temp,
+                id: city.id,
+                country: countriesAbbr.filter(item => Object.keys(item)[0] === city.country)[0][city.country],
+                coord: city.coord
+            }));
+        }else if(city.hasOwnProperty('id')){
+            if(Object.values(localStorage).filter(item => JSON.parse(item).id === city.id).length === 0) {
+                console.log('here');
+                const firstKey = Object.keys(localStorage)[0];
+                localStorage.removeItem(firstKey);
+                localStorage.setItem(city.city.toLowerCase(), JSON.stringify({
+                    temp: city.list[0].temp, 
+                    id: city.id,
+                    country: countriesAbbr.filter(item => Object.keys(item)[0] === city.country)[0][city.country],
+                    coord: city.coord
+                }));
+            }
+        }
             
 
-    }, [cityProp])
+    }, [city, prevCity])
 
     const spinnerContent = loading && <Spinner />;
     const errorContent = error && <Error />;
-    const content = (!loading && !error) && View(city, modifyCityName);
+    const content = (!loading && !error) && View(city, _modifyCityName);
     return (
         <div className="app-weather">
             {spinnerContent}

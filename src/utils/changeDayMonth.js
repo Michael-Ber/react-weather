@@ -1,4 +1,4 @@
-export const changeDayMonth = (actualDate, iterator, returningValue) => {
+const _changeDayMonth = (actualDate, iterator, returningValue) => {
     const actualDayNumber = actualDate.getDate() + iterator;
     const actualMonth = actualDate.getMonth();
     const months = {
@@ -51,15 +51,5 @@ export const changeDayMonth = (actualDate, iterator, returningValue) => {
     return returningValue === 'day' ? actualDayNumber : months[actualMonth];
 }
 
-export const changeWeek = (actualDate, iterator) => {
-    const weekDays = {
-        0: 'Вс',
-        1: 'Пн',
-        2: 'Вт',
-        3: 'Ср',
-        4: 'Чт',
-        5: 'Пт',
-        6: 'Сб'
-    };
-    return weekDays[(actualDate.getDay() + iterator) > 6 ? (actualDate.getDay() + iterator) - 7: (actualDate.getDay() + iterator)];
-}
+export default _changeDayMonth;
+

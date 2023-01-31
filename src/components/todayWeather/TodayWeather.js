@@ -1,27 +1,12 @@
-import { useState, useEffect } from 'react';
 import useWeatherService from '../../service/WeatherService';
 import Spinner from '../spinner/Spinner';
 import Error from '../error/Error';
-import setContent from '../../utils/setContent';
 import './todayWeather.scss';
 
-const TodayWeather = ({cityProp}) => {
-    const [day, setDay] = useState({});
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
-    const { getWeather, clearError, setProcess, process} = useWeatherService(cityProp);
+const TodayWeather = ({weatherArr, loading, error}) => {
+    const { clearError, setProcess, process} = useWeatherService();
+    console.log(weatherArr);
     
-
-    useEffect(() => {
-        // clearError();
-        setError(false);
-        setLoading(true);
-        getWeather(cityProp)
-			.then(res => {setDay(res[0]); return res})
-            .then(() => setLoading(false))
-            .catch(() => {setError(true); setLoading(false)})
-			// .then(() => setProcess('confirmed'))
-    }, [cityProp])
     const dayWeather = (day) => {
         const {main: {temp, feels, pressure, humidity}} = day;
         const {wind: {speed, deg}} = day;
@@ -38,7 +23,7 @@ const TodayWeather = ({cityProp}) => {
 
     const spinnerContent = loading && <Spinner />;
     const errorContent = error && <Error />;
-    const content = (!loading && !error) && dayWeather(day);
+    const content = (!loading && !error) && dayWeather(weatherArr);
     
 
     return (

@@ -3,13 +3,14 @@ import { Context } from '../../service/Context';
 import { Formik, Form, Field } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import useWeatherService from '../../service/WeatherService';
+import { _splitCityName, _transformCity } from '../../utils';
 import './search.scss';
 import search from './search.svg';
 
 const Search = () => {
     const [fetchError, setFetchError] = useState(false);
     const nav = useNavigate();
-    const { getCity } = useWeatherService();
+    const { getData } = useWeatherService();
     const countriesArr = useContext(Context);
 
     const validateInput = (value) => {
@@ -38,11 +39,16 @@ const Search = () => {
                 onSubmit = {values => {
                     
                     setFetchError(false);
-                    getCity(values.city)
-                        .then(res => nav(`/${ countriesArr.filter(item => Array.from(Object.keys(item))[0] === res.country)[0][res.country] }/${values.city}`))
+                    const city = _splitCityName(values.city, countriesArr);
+                    
+                    console.log(city);
+
+                    getData(city)
+                        .then(res => _transformCity(res))
+                        .then(res => {console.log(res); return res})
+                        .then(res => nav(`/${ countriesArr.filter(item => Array.from(Object.keys(item))[0] === res.country)[0][res.country] }/${city.split(',')[0]}`))
                         .catch(eer => {setFetchError(true);console.log(eer)})
                         .finally(() => values.city = '')
-                    
                 }}
             >
                 {({errors, touched}) => (
