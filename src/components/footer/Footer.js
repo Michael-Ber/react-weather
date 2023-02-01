@@ -92,7 +92,7 @@ const Footer = ({cityCoord}) => {
                         </ul>
                     </div>
                     <div className="footer-app__nearly">
-                        <h2 className="footer-app__subtitle">Ближайшие города:</h2>
+                        <h2 className="footer-app__subtitle">Ближайшие населенные пункты:</h2>
                         <ul className="footer-app__list">
                             {nearlyItems}
                         </ul>

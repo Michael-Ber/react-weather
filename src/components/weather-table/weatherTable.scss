@@ -32,7 +32,7 @@
                 text-align: right;
             }
             &_dark {
-                background-color: rgb(204, 205, 205);
+                background-color: rgb(190, 202, 202);
             }
         }
         .col-time {
@@ -44,7 +44,7 @@
         }
         .col-temp {
             font-weight: 700;
-            &_very-cold {color: rgb(0, 0, 174)}
+            &_very-cold {color: rgb(29, 83, 97)}
             &_cold {color: rgb(71, 45, 175)}
             &_middle {color: #2b63a0}
             &_pos {color: rgb(248, 65, 65)}
@@ -91,6 +91,48 @@
                 visibility: visible;
                 opacity: 1;
             }
+        }
+    }
+}
+.tabs {
+    &__triggers {
+    }
+    &__list {
+        display: flex;
+        justify-content: flex-start;
+        list-style-type: none;
+        
+        text-align: center;
+        
+    }
+    &__item {
+        flex: 0 0 calc(100%/7);
+        color: #fff;
+        font-weight: 600;
+        height: 0;
+        border-bottom: 40px solid #2d5fca;
+        border-left: 20px solid transparent;
+        border-right: 20px solid transparent;
+        transition: .2s all;
+        cursor: pointer;
+        &:hover {
+            border-bottom: 40px solid darken(#2d5fca, 20%);
+        }
+        &_active {
+            border-bottom: 40px solid #fff;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            color: #000;
+            &:hover {
+                border-bottom: 40px solid #fff;
+                color: #000;
+            }
+        }
+        p {
+            padding-top: 7px;
+        }
+        &_weekend {
+            color: rgb(231, 96, 96);
         }
     }
 }
