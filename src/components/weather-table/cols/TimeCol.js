@@ -5,7 +5,7 @@ const TimeCol = ({item}) => {
         <td 
             className={colBgStyleClass}>
                 <span className={colValStyleClass}>
-                    {new Date(item.dt).getUTCHours() < 10 ? `0${new Date(item.dt).getUTCHours()}`: new Date(item.dt).getUTCHours()}
+                    {item.dt.getHours() < 10 ? `0${item.dt.getHours()}`: item.dt.getHours()}
                 </span>
         </td>
     )

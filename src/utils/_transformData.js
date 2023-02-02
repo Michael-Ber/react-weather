@@ -2,10 +2,10 @@ import _transformWindDirection from './_transformWindDirection';
 import { v4 as uuidv4 } from 'uuid';
 
 const _transformData = (data, timezone) => {
-    console.log(timezone);
     return {
     id: uuidv4(),
-    dt: data.dt * 1000 + timezone,
+    dt: new Date(data.dt * 1000 + timezone*1000 + new Date().getTimezoneOffset() * 60 * 1000),
+    dt_txt: data.dt_txt,
     clouds: data.clouds.all,
     weather: data.weather[0].description,
     icon: data.weather[0].icon,

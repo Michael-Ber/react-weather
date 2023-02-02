@@ -24,7 +24,6 @@ const WeatherPage = () => {
     useEffect(() => {
         setLoading(true);
         getData(query)
-            .then(res => {console.log(res); return res})
             .then(res => {setCity(_transformCity(res)); return res})
             .then(res => {console.log(res);setWeatherArr(res.list.map(item => _transformData(item, res.city.timezone)))})
             .then(() => setLoading(false))

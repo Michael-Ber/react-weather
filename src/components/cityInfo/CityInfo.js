@@ -28,7 +28,6 @@ const CityInfo = ({city, setCityCoord, loading, error}) => {
             }));
         }else if(city.hasOwnProperty('id')){
             if(Object.values(localStorage).filter(item => JSON.parse(item).id === city.id).length === 0) {
-                console.log('here');
                 const firstKey = Object.keys(localStorage)[0];
                 localStorage.removeItem(firstKey);
                 localStorage.setItem(city.city.toLowerCase(), JSON.stringify({
