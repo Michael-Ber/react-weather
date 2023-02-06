@@ -25,7 +25,7 @@ const WeatherPage = () => {
         setLoading(true);
         getData(query)
             .then(res => {setCity(_transformCity(res)); return res})
-            .then(res => {console.log(res);setWeatherArr(res.list.map(item => _transformData(item, res.city.timezone)))})
+            .then(res => setWeatherArr(res.list.map(item => _transformData(item, res.city.timezone))))
             .then(() => setLoading(false))
             .catch(e => {console.log(e); setError(true)})
     }, [query])

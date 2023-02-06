@@ -1,10 +1,17 @@
 .app-footer {
     margin-top: 50px;
+    @media(max-width: 767px) {
+        padding: 0 10px;
+    }
 }
 .footer-app {
     &__wrapper {
-        display: flex;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(100px, 200px));
         gap: 100px;
+        @media(max-width: 575px) {
+            gap: 30px;
+        }
     }
     &__list {
         position: relative;
@@ -40,4 +47,14 @@
         &_hot {color: rgb(247, 32, 32)}
         &_heat {color: rgb(244, 4, 4)}
     }
+    // &__early {
+    //     @media(max-width: 575px) {
+    //         flex: 0 0 40%;
+    //     }
+    // }
+    // &__nearly {
+    //     @media(max-width: 575px) {
+    //         flex: 0 0 60%;
+    //     }
+    // }
 }

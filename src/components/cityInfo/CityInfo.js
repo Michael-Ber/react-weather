@@ -13,7 +13,6 @@ const CityInfo = ({city, setCityCoord, loading, error}) => {
     const countriesAbbr = useContext(Context);
     const {getCity, clearError, setProcess, process, getCountries} = useWeatherService();
 
-    console.log(city);
     
     
     useEffect(() => {

@@ -5,18 +5,17 @@ import './todayWeather.scss';
 
 const TodayWeather = ({weatherArr, loading, error}) => {
     const { clearError, setProcess, process} = useWeatherService();
-    console.log(weatherArr);
     
     const dayWeather = (day) => {
         const {main: {temp, feels, pressure, humidity}} = day;
         const {wind: {speed, deg}} = day;
         return (
             <>
-                <div className="now-app-weather__temp">За бортом: <span>{Math.floor(temp)}</span> &#8451;</div>
-                <div className="now-app-weather__feels">Ощущается как: <span>{Math.floor(feels)}</span> &#8451;</div>
-                <div className="now-app-weather__pressure">Давление: <span>{Math.floor(pressure)}</span> мм.рт.ст</div>
-                <div className="now-app-weather__humidity">Влажность: <span>{humidity}</span> %</div>
-                <div className="now-app__wind">Ветер: <span>{speed}</span> м/с <span>{deg}</span></div>
+                <div className="now-app-weather__temp"><p><span>{Math.floor(temp)}</span> &#8451;</p></div>
+                <div className="now-app-weather__feels"><p>Ощущается как: <span>{Math.floor(feels)}</span> &#8451;</p></div>
+                <div className="now-app-weather__pressure"><p>Давление: <span>{Math.floor(pressure)}</span> мм.рт.ст</p></div>
+                <div className="now-app-weather__humidity"><p>Влажность: <span>{humidity}</span> %</p></div>
+                <div className="now-app__wind"><p>Ветер: <span>{speed}</span> м/с <span>{deg}</span></p></div>
             </>
         )
     }

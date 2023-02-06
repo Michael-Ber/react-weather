@@ -2,6 +2,18 @@
     .container {
         max-width: 1240px;
         margin: 0 auto;
+        @media(max-width: 1299px) {
+            max-width: 960px;
+        }
+        @media(max-width: 991px) {
+            max-width: 740px;
+        }
+        @media(max-width: 767px) {
+            max-width: 560px;
+        }
+        @media(max-width: 575px) {
+            max-width: 100%;
+        }
     }
 }
 .app-content {

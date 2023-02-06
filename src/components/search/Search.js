@@ -41,11 +41,9 @@ const Search = () => {
                     setFetchError(false);
                     const city = _splitCityName(values.city, countriesArr);
                     
-                    console.log(city);
 
                     getData(city)
                         .then(res => _transformCity(res))
-                        .then(res => {console.log(res); return res})
                         .then(res => nav(`/${ countriesArr.filter(item => Array.from(Object.keys(item))[0] === res.country)[0][res.country] }/${city.split(',')[0]}`))
                         .catch(eer => {setFetchError(true);console.log(eer)})
                         .finally(() => values.city = '')

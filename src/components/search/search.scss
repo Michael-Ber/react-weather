@@ -1,6 +1,9 @@
 .app-search {
     position: relative;
     flex: 1 0 auto;
+    @media(max-width: 575px) {
+        flex: 0 1 auto;
+    }
     &__icon {
         position: absolute;
         top: 10px;
@@ -12,6 +15,9 @@
             height: 100%;
             object-fit: cover;
         }
+        @media(max-width: 575px) {
+            top: 5px;
+        }
     }
     &__input {
         width: 100%;
@@ -19,6 +25,9 @@
         font-size: 18px;
         border: none;
         border-radius: 5px;
+        @media(max-width: 575px) {
+            font-size: 16px;
+        }
     }
     &__error {
         color: rgb(255, 131, 131);

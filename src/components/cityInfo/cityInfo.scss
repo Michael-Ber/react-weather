@@ -3,17 +3,36 @@
     min-height: 36px;
     margin-bottom: 30px;
     &__header {
-        display: flex;
-        justify-content: center;
-        align-items: baseline;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px , auto));
+        align-items: center;
         gap: 30px;
         font-size: 14px;
         font-weight: 600;
+        @media(max-width: 991px) {
+            gap: 10px;
+        }
     }
     &__sun {
+        justify-self: center;
         span {
             font-weight: 700;
         }
     }
-    
+    &__title {
+        line-height: 44px;
+        justify-self: center;
+        @media(max-width: 991px) {
+            font-size: 20px;
+            line-height: 40px;
+        }
+    }
+    &__date {
+        justify-self: center;
+        @media(max-width: 991px) {
+        }
+    }
+    &__coord {
+        justify-self: center;
+    }
 }

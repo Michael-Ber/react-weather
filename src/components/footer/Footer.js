@@ -11,7 +11,6 @@ const Footer = ({cityCoord}) => {
     const [nearly, setNearly] = useState([]);
     const {cityName} = useParams();
     const {getCitiesCoord} = useWeatherService();
-    console.log('render');
 
     useEffect(() => {
         setObj(localStorage)
@@ -48,7 +47,7 @@ const Footer = ({cityCoord}) => {
                 return resArr;
                 
             })
-            .then(res => {console.log(res); setNearly(res)})
+            .then(res =>  setNearly(res))
             .catch(e => console.log(e))
     }, [cityCoord])
 
@@ -92,7 +91,7 @@ const Footer = ({cityCoord}) => {
                         </ul>
                     </div>
                     <div className="footer-app__nearly">
-                        <h2 className="footer-app__subtitle">Ближайшие населенные пункты:</h2>
+                        <h2 className="footer-app__subtitle">Ближайшие н.п:</h2>
                         <ul className="footer-app__list">
                             {nearlyItems}
                         </ul>

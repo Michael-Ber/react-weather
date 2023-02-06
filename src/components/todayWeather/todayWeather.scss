@@ -2,10 +2,10 @@
     &__now {
         position: relative;
         min-height: 80px;
-        display: flex;
-        justify-content: space-around;
-        align-items: baseline;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(160px, auto));
+        grid-template-rows: 1fr;
+        align-items: center;
         gap: 20px;
         padding: 15px 25px 25px 25px;
         background: linear-gradient(to top, #2719f0, #6055f1);
@@ -16,14 +16,39 @@
         span {
             font-weight: 600;
         }
+        @media(max-width: 1299px) {
+            grid-template-columns: repeat(4, minmax(160px, auto));
+        }
+        @media(max-width: 991px) {
+            grid-template-columns: repeat(3, minmax(210px, auto));
+        }
+        @media(max-width: 767px) {
+            grid-template-columns: repeat(3, minmax(145px, auto));
+            padding: 15px 10px 25px 10px;
+            gap: 10px;
+        }
+        @media(max-width: 575px) {
+            grid-template-columns: repeat(2, minmax(145px, auto));
+        }
     }
 }
 
 .now-app-weather {
     &__temp {
         font-size: 32px;
+        @media(max-width: 575px) {
+            justify-self: center;
+        }
     }
-    &__clouds {
-        text-transform: uppercase;
+    &__wind {
+        @media(max-width: 767px) {
+            justify-self: center;
+        }
     }
+    &__feels, &__pressure, &__humidity {
+        @media(max-width: 575px) {
+            display: none;
+        }
+    }
+
 }

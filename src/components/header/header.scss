@@ -7,6 +7,9 @@
     background: linear-gradient(to bottom, #2719f0, #6055f1);
     padding: 20px 100px 0 100px;
     z-index: 10000;
+    @media(max-width: 767px) {
+        padding: 20px 30px 0 30px;
+    }
     &__wrapper {
         display: flex;
         align-items: flex-start;
@@ -21,11 +24,17 @@
             height: 100%;
             object-fit: cover;
         }
+        @media(max-width: 575px) {
+            min-width: 40px;
+        }
     }
     &__title {
         font-size: 20px;
         line-height: 26px;
         color: #ffffff;
         margin-right: 40px;
+        @media(max-width: 575px) {
+            display: none;
+        }
     }
 }

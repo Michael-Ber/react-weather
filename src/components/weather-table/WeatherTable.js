@@ -13,6 +13,8 @@ import {
     WindCol
 } from './cols/index';
 
+import {setActiveClassForTab} from '../../utils/_setActiveClassForTab';
+
 import './weatherTable.scss';
 
 const WeatherTable = memo(({weatherArr, loading, error}) => {
@@ -59,7 +61,7 @@ const WeatherTable = memo(({weatherArr, loading, error}) => {
 });
 
 const View = ({arr, allData}) => {
-    const [tabContent, setTabContent] = useState([1,2,3,4,5,6,7,8]);
+    const [tabContent, setTabContent] = useState(10);
     const date = new Date();
     const setColClasses = (weekDay, classes) => {
         const a = weekDay > 6 ? weekDay - 7 : weekDay;
@@ -67,7 +69,6 @@ const View = ({arr, allData}) => {
         return (a > 0 && a < 6) ? classMain: classWeekend;
     }
 
-    console.log(allData);
 
     const actualWeekDay = (n) => _changeWeek(date, n);
     const actualDay = (n) => _changeDayMonth(date, n, 'day');  
@@ -84,9 +85,8 @@ const View = ({arr, allData}) => {
     ];
 
     const arrSet = [...new Set(arr.map(item => item.dt.getDate()))]; //123456
-    const arrSetFull = [...new Set(allData.map(item => item.dt.getDate()))]; //123456
 
-    const thContent6Days = arrSet.map((item, i, array) => {
+    const thContent6Days = arrSet.map((item, i) => {
         let colspan = 0;
         switch(i) {
             case 0: if(tabContent > 8) {
@@ -134,44 +134,23 @@ const View = ({arr, allData}) => {
             </th>
         )
     })
-    // const thContent6Days = arrSet.map((item, i, array) => {
-    //     let colspan = (i === 0 && array.length < 6) ? 5 : (i === 0 && array.length > 5) ? 3 : 4;
-    //     let today = i === 0 ? 'Сегодня, ' : i === 1 ? 'Завтра, ': null;
-    //     return (
-    //         <th 
-    //             key={i} 
-    //             scope="col" 
-    //             colSpan={colspan}  
-    //             className={setColClasses(date.getDay()+i, ['col-head', 'col-head col-head_weekend'])}>
-    //             {today}{actualWeekDay(i)}, {actualDay(i)} {actualMonth(i)}
-                
-    //         </th>
-    //     )
-    // })
-    // const trContentFullDays = arrSetFull.map((item, i, array) => {
-    //     let colspan = i === 0 ? tabContent.length + 1 : tabContent.length; 
-    //     let today = i === 0 ? 'Сегодня, ' : i === 1 ? 'Завтра, ': null;
-    //     return (
-    //         <th 
-    //             key={i} 
-    //             scope="col" 
-    //             colSpan={colspan}  
-    //             className={setColClasses(date.getDay()+i, ['col-head', 'col-head col-head_weekend'])}>
-    //             {today}{actualWeekDay(i)}, {actualDay(i)} {actualMonth(i)}
-                
-    //         </th>
-    //     )
-    // })
 
     const tabItem = arrSet.map((item, i) => {
-        let today = i === 0 ? 'Сегодня, ' : i === 1 ? 'Завтра, ': null;
+        let today = i === 0 ? <span>Сегодня,</span>  : i === 1 ? <span>Завтра,</span>: null;
         return (
             <li 
                 key={i} 
                 onClick={(e) => {
-                    const t = document.querySelectorAll('.col-head')[i];
-                    setTabContent(allData.filter(elem => elem.dt.getDate() === item).length); console.log(item, t.closest('.app-weather__table'));
-                    t.closest('.tabs__content').scrollLeft = t.offsetLeft;
+
+                    return new Promise(resolve => {
+                        setTabContent(allData.filter(elem => elem.dt.getDate() === item).length);
+                        setActiveClassForTab(e.target, 'tabs__list', 'tabs__item', 'tabs__item_active');
+                        resolve(true); 
+                    })
+                    .then (() => {
+                        const t = document.querySelectorAll('.col-head')[i];
+                        t.closest('.tabs__content').scrollLeft = t.offsetLeft;
+                    })
                 }}
                 className={setColClasses(date.getDay()+i, ['tabs__item', 'tabs__item tabs__item_weekend'])}>
                 <p>{today}{actualWeekDay(i)}</p>
@@ -185,7 +164,12 @@ const View = ({arr, allData}) => {
                 <ul className="tabs__list">
                     <li
                         className="tabs__item tabs__item_active"
-                        onClick={() => {setTabContent(arr.length)}}><p>6 суток</p></li>
+                        onClick={(e) => {
+                            setTabContent(arr.length);
+                            setActiveClassForTab(e.target, 'tabs__list', 'tabs__item', 'tabs__item_active');
+                            }}>
+                                <p>6 суток</p>
+                    </li>
                     {tabItem}
                 </ul>
             </div>
@@ -201,8 +185,7 @@ const View = ({arr, allData}) => {
                     <tbody>
                         {colsName.map((item, j) => { //array
                             const Comp = item[1];
-                            const deg = typeof(item[0]) === 'string' && item[0].replace(/[&#8451;]/g, '');
-                            
+                            const deg = (typeof(item[0]) === 'string' && item[0].match(/[&#8451;]/g)) ? item[0].replace(/[&#8451;]/g, '') : null;
                             return (
                                 <tr key={j} className="row" >
                                     <td className="col-body col-body_side">

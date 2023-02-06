@@ -14,3 +14,7 @@ body {
   background-color: #c0e0f6;
 }
 
+#root {
+  overflow-x: hidden;
+}
+
