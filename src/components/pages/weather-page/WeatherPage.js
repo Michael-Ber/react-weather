@@ -15,34 +15,31 @@ const WeatherPage = () => {
     const [cityCoord, setCityCoord] = useState({});
     const [city, setCity] = useState({});
     const [weatherArr, setWeatherArr] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
     const countriesArr = useContext(Context);
-    const {getData} = useWeatherService();
+    const {getData, process, setProcess} = useWeatherService();
     const query = `${cityName},${_modifyCountryToEng(countryName, countriesArr)}`;
-
+    
     useEffect(() => {
-        setLoading(true);
         getData(query)
             .then(res => {setCity(_transformCity(res)); return res})
             .then(res => setWeatherArr(res.list.map(item => _transformData(item, res.city.timezone))))
-            .then(() => setLoading(false))
-            .catch(e => {console.log(e); setError(true)})
+            .then(() => setProcess('confirmed'))
+            .catch(e => { setProcess('error'); console.log(e);throw new Error(e)})
+
     }, [query])
- 
     return (
         <div className="main-page">
             <ErrorBoundary>
-                <CityInfo loading={loading} error={error} city={city} setCityCoord={setCityCoord}/>
+                <CityInfo city={city} setCityCoord={setCityCoord} process={process}/>
             </ErrorBoundary>
             <ErrorBoundary>
-                <TodayWeather loading={loading} error={error} weatherArr={weatherArr[0]}/>
+                <TodayWeather process={process} weatherArr={weatherArr[0]}/>
             </ErrorBoundary>
             <ErrorBoundary>
-                <WeatherTable loading={loading} error={error} weatherArr={weatherArr}/>
+                <WeatherTable process={process} weatherArr={weatherArr}/>
             </ErrorBoundary>
             <ErrorBoundary>
-                <Footer loading={loading} error={error} cityCoord={cityCoord}/>
+                <Footer process={process} cityCoord={cityCoord}/>
             </ErrorBoundary>
         </div>
     )

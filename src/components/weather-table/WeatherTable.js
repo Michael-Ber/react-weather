@@ -1,7 +1,4 @@
-import { useEffect, useState, memo } from "react";
-import Spinner from "../spinner/Spinner";
-import Error from "../error/Error";
-import useWeatherService from "../../service/WeatherService";
+import { useEffect, useState } from "react";
 import { _changeDayMonth, _changeWeek } from "../../utils";
 import {
     FeelsCol, 
@@ -16,13 +13,13 @@ import {
 import {setActiveClassForTab} from '../../utils/_setActiveClassForTab';
 
 import './weatherTable.scss';
+import setContent from "../../utils/setContent";
 
-const WeatherTable = memo(({weatherArr, loading, error}) => {
+const WeatherTable = ({weatherArr, process}) => {
     const [weatherArrFiltered, setWeatherArrFiltered] = useState([]);
     const [weatherArrAll, setWeatherArrAll] = useState([]);
-    const {getWeather, process, setProcess, clearError} = useWeatherService();
+    const [arraysDone, setArraysDone] = useState(false);
 
-    
     useEffect(() => {
         if(weatherArr && weatherArr.length > 0) {
             setWeatherArrFiltered(
@@ -44,23 +41,29 @@ const WeatherTable = memo(({weatherArr, loading, error}) => {
                 )
             )
         }
+        
+        
     }, [weatherArr])
 
-    const spinnerContent = loading && <Spinner />;
-    const errorContent = error && <Error />;
-    const content = (!loading && !error) && <View arr={weatherArrFiltered} allData={weatherArrAll}/>;
+    useEffect(() => {
+        if(weatherArrFiltered.length === 0 && weatherArrAll.length === 0) {
+            setArraysDone(false);
+        }else {
+            setArraysDone(true);
+        }
+    }, [weatherArrFiltered, weatherArrAll])
 
     return (
         <div className="app-weather__content">
-            {spinnerContent}
-            {errorContent}
-            {content}
+            {arraysDone && setContent(process, View, {arr: weatherArrFiltered, allData: weatherArrAll})}
         </div>
         
     )
-});
+};
 
-const View = ({arr, allData}) => {
+const View = ({data}) => {
+    const {arr} = data;
+    const {allData} = data;
     const [tabContent, setTabContent] = useState(10);
     const date = new Date();
     const setColClasses = (weekDay, classes) => {

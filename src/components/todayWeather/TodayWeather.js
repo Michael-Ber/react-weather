@@ -1,10 +1,7 @@
-import useWeatherService from '../../service/WeatherService';
-import Spinner from '../spinner/Spinner';
-import Error from '../error/Error';
+import setContent from '../../utils/setContent';
 import './todayWeather.scss';
 
-const TodayWeather = ({weatherArr, loading, error}) => {
-    const { clearError, setProcess, process} = useWeatherService();
+const TodayWeather = ({weatherArr, process}) => {
     
     const dayWeather = (day) => {
         const {main: {temp, feels, pressure, humidity}} = day;
@@ -20,16 +17,9 @@ const TodayWeather = ({weatherArr, loading, error}) => {
         )
     }
 
-    const spinnerContent = loading && <Spinner />;
-    const errorContent = error && <Error />;
-    const content = (!loading && !error) && dayWeather(weatherArr);
-    
-
     return (
-        <div className="app-weather__now now-app-weather">
-            {spinnerContent}
-            {errorContent}
-            {content}
+        <div className={`app-weather__now now-app-weather ${process==='error' && 'app-weather__now_error'}`}>
+            {setContent(process, () => dayWeather(weatherArr))}
         </div>
     )
 };

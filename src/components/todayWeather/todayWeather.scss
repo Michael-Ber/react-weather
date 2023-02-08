@@ -13,6 +13,11 @@
         font-weight: 400;
         color: #fff;
         border-radius: 10px;
+        &_error {
+            grid-template-columns: 430px;
+            justify-content: center;
+            background: none;
+        }
         span {
             font-weight: 600;
         }
@@ -50,5 +55,5 @@
             display: none;
         }
     }
-
+    
 }

@@ -2,7 +2,6 @@ import { useState, useCallback } from "react";
 
 export const useHttp = () => {
     const [process, setProcess] = useState('waiting');
-    // console.log('render');
     const request = useCallback(async(url, method='GET', body=null,  headers={'Content-Type': 'text/plain'}) => {
         setProcess('loading');
         try {

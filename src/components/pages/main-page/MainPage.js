@@ -1,7 +1,7 @@
 import ErrorBoundary from "../../errorBoundary/ErrorBoundary";
 import { Context } from "../../../service/Context";
 import { useContext } from "react";
-import { Link, useMatch, useLocation } from "react-router-dom";
+import { Link, useMatch } from "react-router-dom";
 
 import './mainPage.scss';
 
@@ -12,7 +12,7 @@ const MainPage = () => {
     const match = useMatch('/');
     const content = upperLiteralCountry.map((item, i) => {
         return (
-            <li key={i} className="main-page__item item-main-page">
+            <li key={i} className="main-page__item item-main-page" >
                 <p className="item-main-page__header">{item}</p> {/*Country Literal*/}
                 <ul className="item-main-page__sublist">
                     {arr
@@ -20,7 +20,6 @@ const MainPage = () => {
                         .map((item, j) => 
                             <li className="item-main-page__subitem" key={j}> {/*Country*/}
                                 <Link 
-                                    // onClick={() => setCountry(item)} 
                                     to={`${match.pathname}${item}`} 
                                     className="item-main-page__link">
                                     {item}
@@ -36,6 +35,7 @@ const MainPage = () => {
         <>
             <ErrorBoundary>
                 <div className="main-page">
+                    <h1 className="main-page__countries">Список доступных стран</h1>
                     <ul className="main-page__list">
                         {content}
                     </ul>

@@ -1,12 +1,13 @@
 import Spinner from "../components/spinner/Spinner";
 import Error from '../components/error/Error';
 
-const setContent = (process, Component, data=null) => {
+const setContent = (process, Component, data, spinnerStyles) => {
     switch(process) {
-        case 'loading': return <Spinner />
+        case 'waiting': return null
+        case 'loading': return <Spinner customStyles={spinnerStyles}/>
         case 'error': return <Error />
         case  'confirmed': return <Component data={data}/>
-        default: return <Error />
+        default: console.log('error')
     }
 };
 

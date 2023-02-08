@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
-import Spinner from '../spinner/Spinner';
 import { Link, useParams } from 'react-router-dom';
 import NearlyLiItem from './NearlyLiItem';
 import useWeatherService from '../../service/WeatherService';
 import './footer.scss';
+import setContent from '../../utils/setContent';
 
 const Footer = ({cityCoord}) => {
 
     const [obj, setObj] = useState({});
     const [nearly, setNearly] = useState([]);
     const {cityName} = useParams();
-    const {getCitiesCoord} = useWeatherService();
+    const {getCities, process, setProcess} = useWeatherService();
 
     useEffect(() => {
         setObj(localStorage)
@@ -19,7 +19,7 @@ const Footer = ({cityCoord}) => {
     useEffect(() => {
         setNearly([]);
         cityCoord && cityCoord.hasOwnProperty('lat') && 
-        getCitiesCoord()
+        getCities()
             .then((res) => res.filter(item => 
                     ((item.coord.lon > (cityCoord.lon - 2) &&
                     item.coord.lon < cityCoord.lon) || 
@@ -48,7 +48,8 @@ const Footer = ({cityCoord}) => {
                 
             })
             .then(res =>  setNearly(res))
-            .catch(e => console.log(e))
+            .then(() => setProcess('confirmed'))
+            .catch(e => {console.log(e); setProcess('error')})
     }, [cityCoord])
 
 
@@ -78,8 +79,6 @@ const Footer = ({cityCoord}) => {
                         return null
                         
     })
-    const nearlyItems = (nearly.length > 0) ? 
-                            nearly.map(item => <NearlyLiItem key={item.id} city={item}/>) : <Spinner />  ;
     return (
         <div className="app-footer footer-app">
             <div className="container">
@@ -93,7 +92,7 @@ const Footer = ({cityCoord}) => {
                     <div className="footer-app__nearly">
                         <h2 className="footer-app__subtitle">Ближайшие н.п:</h2>
                         <ul className="footer-app__list">
-                            {nearlyItems}
+                            {setContent(process, () => nearly.map(item => <NearlyLiItem key={item.id} city={item}/>))}
                         </ul>
                     </div>
                 </div>

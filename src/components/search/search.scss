@@ -29,6 +29,27 @@
             font-size: 16px;
         }
     }
+    &__modal {
+        display: flex;
+        flex-direction: column;
+        max-height: 200px;
+        max-width: 400px;
+        overflow-y: scroll;
+        background-color: #fff;
+        // padding: 10px;
+    }
+    &__item {
+        padding: 5px;
+        color: #000;
+        &:hover {
+            background-color: rgb(58, 58, 255);
+            color: #fff;
+        }
+    }
+    &__link {
+        text-decoration: none;
+        color: inherit;
+    }
     &__error {
         color: rgb(255, 131, 131);
     }

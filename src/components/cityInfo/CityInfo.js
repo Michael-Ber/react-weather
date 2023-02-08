@@ -1,19 +1,14 @@
 import { useState, useEffect, useContext } from 'react';
-import useWeatherService from '../../service/WeatherService';
-import Spinner from '../spinner/Spinner';
-import Error from '../error/Error';
 import { Context } from '../../service/Context';
 import { _modifyCityName } from '../../utils';
-
+import { memo } from 'react';
 import './cityInfo.scss';
+import setContent from '../../utils/setContent';
 
 
-const CityInfo = ({city, setCityCoord, loading, error}) => {
+const CityInfo = memo(({city, setCityCoord, process}) => {
     const [prevCity, setPrevCity] = useState({});
     const countriesAbbr = useContext(Context);
-    const {getCity, clearError, setProcess, process, getCountries} = useWeatherService();
-
-    
     
     useEffect(() => {
         setPrevCity(city);
@@ -41,19 +36,16 @@ const CityInfo = ({city, setCityCoord, loading, error}) => {
 
     }, [city, prevCity])
 
-    const spinnerContent = loading && <Spinner />;
-    const errorContent = error && <Error />;
-    const content = (!loading && !error) && View(city, _modifyCityName);
     return (
         <div className="app-weather">
-            {spinnerContent}
-            {errorContent}
-            {content}
+            {setContent(process, View, {city, _modifyCityName})}
         </div>
     )
-}
+})
 
-const View = ({sunrise, sunset, city, coord : {lat, lon}, timezone}, modifyCityName) => {
+const View = ({data}) => {
+    const {sunrise, sunset, city, coord : {lat, lon}, timezone} = data.city;
+    const {_modifyCityName} = data;
     const date = new Date(new Date().getTime() + timezone);
 
     const mdfHours = (time) => new Date(time).getUTCHours() < 10 ? `0${new Date(time).getUTCHours()}`: new Date(time).getUTCHours();
@@ -65,7 +57,7 @@ const View = ({sunrise, sunset, city, coord : {lat, lon}, timezone}, modifyCityN
 
     return (
         <div className="app-weather__header">
-            <h1 className="app-weather__title">Погода в {modifyCityName(city)}</h1>
+            <h1 className="app-weather__title">Погода в {_modifyCityName(city)}</h1>
             <p className='app-weather__date'>Местное время: {date.getUTCHours()}:{date.getMinutes() < 10 ? `0${date.getMinutes()}`: date.getMinutes()}</p>
             <p className='app-weather__coord'>Широта: {lat.toFixed(2)} Долгота: {lon.toFixed(2)}</p>
             <p className="app-weather__sun">Восход: <span>{sunriseTime}</span> Закат: <span>{sunsetTime}</span></p>

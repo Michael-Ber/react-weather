@@ -1,9 +1,9 @@
 import spinner from './spinner.gif';
 import './spinner.scss';
 
-const Spinner = () => {
+const Spinner = ({customStyles}) => {
     return (
-        <div className="spinner">
+        <div style={customStyles} className="spinner">
             <img src={spinner} alt="spinner" />
         </div>
     )

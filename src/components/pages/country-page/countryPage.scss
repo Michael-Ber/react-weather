@@ -1,4 +1,9 @@
 .country {
+    position: relative;
+    min-height: 70px;
+    @media(max-width: 575px) {
+        padding: 0 10px;
+    }
     &__title {
         text-align: center;
         margin-bottom: 50px;
@@ -6,14 +11,17 @@
     &__list {
         position: relative;
         display: grid;
-        grid-template-columns: repeat(6, 1fr);
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
         gap: 40px;
+        
     }
     &__item {
         position: relative;
         width: 150px;
         list-style-type: none;
-        
+        @media(max-width: 575px) {
+            justify-self: center;
+        }
     }
 }
 .item-country {
