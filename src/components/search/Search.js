@@ -14,6 +14,7 @@ const Search = () => {
     const [loading, setLoading] = useState(false);
     const [val, setVal] = useState('');
     const [list, setList] = useState(null);
+    const [showModal, setShowModal] = useState(false);
     const nav = useNavigate();
     const { getData, process, setProcess, getCities } = useWeatherService();
     const countriesArr = useContext(Context);
@@ -21,8 +22,10 @@ const Search = () => {
     const validateInput = (value) => {
         let error;
         if(!value) {
-            error = 'Введите название города'
+            console.log('no value');
+            error = 'Введите название города';
         } else if(value.match(/[A-Z]*[a-z]*[А-Я]*[а-я]*/)[0] === '') {
+            console.log('bad value');
             error = 'Название города должно состоять из букв';
         }
         if(value !== '') {
@@ -31,18 +34,26 @@ const Search = () => {
         return error;
     }
     useEffect(() => {
-        if(val.length > 1)  {
-        setLoading(true);
-         getCities()
-            .then(res => res.filter(item => item.name.toLowerCase().substring(0, val.length) === val.toLowerCase()))
-            .then(res => {return setList(res.map(item => ({id: item.id, name: item.name, country: countriesArr.filter(elem => Object.keys(elem)[0] === item.country)[0][item.country]})))})
-            .then(() => {setProcess('confirmed'); setLoading(false)})
-            // .then(res => setLoading(false))
-            .catch(e => {console.log(e); setProcess('error')})
-        }else if(val === '' || val === null || val.length <= 1){
+        
+        if(val.length > 2)  {
             setList(null);
+            setLoading(true);
+            getCities()
+                .then(res => res.filter(item => item.name.toLowerCase().substring(0, val.length) === val.toLowerCase()))
+                .then(res => setList(
+                    res.map(item => ({id: item.id, name: item.name, country: countriesArr
+                        .filter(elem => Object.keys(elem)[0] === item.country)[0][item.country]})
+                            )
+                        )
+                    )
+                .then(() => {setProcess('confirmed'); setLoading(false)})
+                .then(() => setShowModal(true))
+                .catch(e => {console.log(e); setProcess('error')})
+        }else if(val === '' || val === null || val.length <= 2){
+            setList(null);
+            setShowModal(false);
         }
-    }, [val, setList])
+    }, [val])
     return (
         <div className="app-search">
             <div className="app-search__icon">
@@ -73,36 +84,36 @@ const Search = () => {
                             validate={validateInput}
                             className='app-search__input'
                             placeholder='Введите город'
-                            onBlur={() => {setFetchError(false); setList(null)}}
+                            onBlur={() => {setFetchError(false); setTimeout(() => setShowModal(false), 100)}}
                             onInput={(e) => setVal(e.target.value)}
                             name="city"
                             id="city"
                             value = {val}
                         />
-                        {errors.city && touched.city && <span className='app-search__error'>{errors.city}</span>}
+                        {errors.city && <span className='app-search__error'>{errors.city}</span>}
                         {(fetchError && !errors.city) && <span className='app-search__error'>Ошибка запроса, такого города нет в базе данных</span>}
                     </Form>
                 )}
             </Formik>
-            <div className="app-search__modal">
+            <div style={showModal ? {'display': 'flex'} : {'display': 'none'}}  className="app-search__modal">
                 <ul className="app-search__list">
-                    {list && !loading ? setContent(process, () => list.map(item => {
+                    {console.log(loading)}
+                    {(list && !loading) && setContent(process, () => list.map(item => {
                         return (
                             <li key={item.id} className="app-search__item">
                                 <Link 
                                     className='app-search__link'
+                                    onClick={() => {setShowModal(false); setVal('')}}
                                     to={`${item.country}/${item.name}`}>
                                         {item.name}, {item.country}
                                 </Link>
                             </li>
                         )
-                    }), null, {'width': '20px', 'height': '20px', 'left': '98%'}) : 
-                    loading ?
-                    <Spinner customStyles = {{'width': '20px', 'height': '20px', 'left': '98%'}}/> : null}
+                    }), null, {'width': '20px', 'height': '20px', 'left': '98%'})}
                     
                 </ul>
-                
             </div>
+            {loading && <Spinner customStyles={{'width': '20px', 'height': '20px', 'left': '98%'}}/>}
         </div>
     )
 };
