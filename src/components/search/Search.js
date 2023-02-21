@@ -22,10 +22,8 @@ const Search = () => {
     const validateInput = (value) => {
         let error;
         if(!value) {
-            console.log('no value');
             error = 'Введите название города';
         } else if(value.match(/[A-Z]*[a-z]*[А-Я]*[а-я]*/)[0] === '') {
-            console.log('bad value');
             error = 'Название города должно состоять из букв';
         }
         if(value !== '') {
@@ -35,7 +33,7 @@ const Search = () => {
     }
     useEffect(() => {
         
-        if(val.length > 2)  {
+        if(val.length > 2 && val.match(/[A-Z]*[a-z]*/ig)[0].length > 0)  {
             setList(null);
             setLoading(true);
             getCities()
@@ -56,9 +54,7 @@ const Search = () => {
     }, [val])
     return (
         <div className="app-search">
-            <div className="app-search__icon">
-                <img src={search} alt="search-icon" />
-            </div>
+            
             <Formik
                 initialValues={{
                     city: ''
@@ -75,7 +71,7 @@ const Search = () => {
                         .then(res => nav(`/${ countriesArr.filter(item => Array.from(Object.keys(item))[0] === res.country)[0][res.country] }/${city.split(',')[0]}`))
                         .then(() => setProcess('confirmed'))
                         .catch(eer => {setProcess('error');setFetchError(true);console.log(eer)})
-                        .finally(() => values.city = '')
+                        .finally(() => setVal(''))
                 }}
             >
                 {({errors, touched}) => (
@@ -92,12 +88,14 @@ const Search = () => {
                         />
                         {errors.city && <span className='app-search__error'>{errors.city}</span>}
                         {(fetchError && !errors.city) && <span className='app-search__error'>Ошибка запроса, такого города нет в базе данных</span>}
+                        <button className="app-search__icon">
+                            <img src={search} alt="search-icon" />
+                        </button>
                     </Form>
                 )}
             </Formik>
             <div style={showModal ? {'display': 'flex'} : {'display': 'none'}}  className="app-search__modal">
                 <ul className="app-search__list">
-                    {console.log(loading)}
                     {(list && !loading) && setContent(process, () => list.map(item => {
                         return (
                             <li key={item.id} className="app-search__item">
@@ -109,11 +107,11 @@ const Search = () => {
                                 </Link>
                             </li>
                         )
-                    }), null, {'width': '20px', 'height': '20px', 'left': '98%'})}
+                    }), null, {'width': '20px', 'height': '20px', 'left': 'unset', 'right': '5px'})}
                     
                 </ul>
             </div>
-            {loading && <Spinner customStyles={{'width': '20px', 'height': '20px', 'left': '98%'}}/>}
+            {loading && <Spinner customStyles={{'width': '20px', 'height': '20px', 'left': 'unset', 'right': '5px'}}/>}
         </div>
     )
 };

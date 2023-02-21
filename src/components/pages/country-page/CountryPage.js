@@ -12,8 +12,7 @@ const CountryPage = () => {
     const {getCountries, process, setProcess} = useWeatherService();
     const {pathname} = useLocation();
     let {countryName} = useParams();
-    const countryAbbr = countryName && Object.keys(...abbr.filter(elem => Object.values(elem)[0] === countryName))[0];
-    
+    const countryAbbr = countryName.match(/[A-Z]*[a-z]*/g)[0].length > 0 ? countryName.toUpperCase() : Object.keys(...abbr.filter(elem => Object.values(elem)[0] === countryName))[0];
 
     useEffect(() => {
         getCountries(countryAbbr)
@@ -30,6 +29,9 @@ const CountryPage = () => {
             {setContent(process, () => {
                 return (
                     <>
+                        <div className="app-weather__links">
+                            <Link to={'/Все_страны'}>Все страны</Link>
+                        </div>
                         <h1 className="country__title">{countryName}</h1>
                         <ul className="country__list">
                             {cities.map((arr, i) => {

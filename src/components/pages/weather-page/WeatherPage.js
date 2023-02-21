@@ -6,7 +6,7 @@ import ErrorBoundary from "../../errorBoundary/ErrorBoundary";
 import useWeatherService from "../../../service/WeatherService";
 import { Context } from "../../../service/Context";
 import { useState, useContext, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { _transformCity, _transformData, _modifyCountryToEng } from "../../../utils";
 
 
@@ -18,13 +18,19 @@ const WeatherPage = () => {
     const countriesArr = useContext(Context);
     const {getData, process, setProcess} = useWeatherService();
     const query = `${cityName},${_modifyCountryToEng(countryName, countriesArr)}`;
-    
+    const nav = useNavigate();
+
     useEffect(() => {
-        getData(query)
-            .then(res => {setCity(_transformCity(res)); return res})
-            .then(res => setWeatherArr(res.list.map(item => _transformData(item, res.city.timezone))))
-            .then(() => setProcess('confirmed'))
-            .catch(e => { setProcess('error'); console.log(e);throw new Error(e)})
+        if(_modifyCountryToEng(countryName, countriesArr) !== null) {
+            getData(query)
+                .then(res => {setCity(_transformCity(res)); return res})
+                .then(res => setWeatherArr(res.list.map(item => _transformData(item, res.city.timezone))))
+                .then(() => setProcess('confirmed'))
+                .catch(e => { setProcess('error'); console.log(e);throw new Error(e)})
+        }else {
+            nav('*');
+        }
+        
 
     }, [query])
     return (
