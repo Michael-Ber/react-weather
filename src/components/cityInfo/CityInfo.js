@@ -48,7 +48,6 @@ const View = ({data}) => {
     const {sunrise, sunset, city, coord : {lat, lon}, timezone} = data.city;
     const {_modifyCityName, countryName} = data;
     const date = new Date(new Date().getTime() + timezone);
-
     const mdfHours = (time) => new Date(time).getUTCHours() < 10 ? `0${new Date(time).getUTCHours()}`: new Date(time).getUTCHours();
 
     const mdfMinutes = (time) => new Date(time).getMinutes() < 10 ? `0${new Date(time).getMinutes()}`: new Date(time).getMinutes();

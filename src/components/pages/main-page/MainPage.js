@@ -1,18 +1,9 @@
-import { useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import bg from './bg.png';
 import './mainPage.scss';
 
 const MainPage = () => {
-    const nav = useNavigate();
 
-    useEffect(() => {
-        if(localStorage.length > 0) {
-            const countryName = JSON.parse(localStorage.getItem(Object.keys(localStorage)[0]));
-            const cityName = Object.keys(localStorage)[0];
-            nav(`/${countryName.country}/${cityName}`)
-        }
-    }, [])
     return (
         <div className="main-page">
             <img    

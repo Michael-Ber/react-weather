@@ -1,5 +1,5 @@
 import { Context } from '../../service/Context';
-import { Routes, Route, useParams } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { countriesAbbr as abbr} from '../../db/countriesAbbrToRu';
 import ErrorBoundary from '../errorBoundary/ErrorBoundary';
 import Header from '../header/Header';

@@ -83,46 +83,6 @@ const CountryPage = () => {
             })}
         </div>
 
-
-
-
-
-
-
-        // <div className="country">
-        //     <h1 className="country__title">{countryName}</h1>
-        //     <ul className="country__list">
-        //         {/* {spinner} */}
-        //         {/* {error} */}
-        //         {/* {content} */}
-        //         {setContent(process, () => cities.map((arr, i) => {
-        //                 return (
-        //                     <li 
-        //                         key={i}
-        //                         className="country__item item-country">
-        //                         <p className="item-country__header">{arr.length > 0 && arr[0].name[0]}</p> {/*First arr item -> First literal of name */}
-        //                         <ul 
-        //                             onMouseEnter={(e) => addActive(e)} 
-        //                             onMouseLeave={(e) => removeActive(e)} 
-        //                             className="item-country__sublist">
-        //                             {arr.map((obj, j) => {
-        //                                 return (
-        //                                     <li key={j} className="item-country__subitem">
-        //                                         <Link
-        //                                             to={`${decodeURI(pathname)}/${obj.name}`}
-        //                                             className="item-country__link">
-        //                                             {obj.name}
-        //                                         </Link>
-        //                                     </li>
-        //                                 )
-        //                             })}
-        //                         </ul>
-        //                     </li>
-        //                 )
-        //             })
-        //         )}
-        //     </ul>
-        // </div>
     )
 };
 export default CountryPage;

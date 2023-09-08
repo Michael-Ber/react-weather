@@ -1,7 +1,7 @@
 import ErrorBoundary from "../../errorBoundary/ErrorBoundary";
 import { Context } from "../../../service/Context";
-import { useContext, useEffect } from "react";
-import { Link, useMatch, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { Link } from "react-router-dom";
 
 import './countriesPage.scss';
 

@@ -4,6 +4,7 @@ const useWeatherService = () => {
     const {request, clearError, process, setProcess} = useHttp();
     const _apiKey = '60821d8da82efddc7040a50bc511c640';
     const _url = `https://api.openweathermap.org/data/2.5/forecast?id=524901&appid=${_apiKey}&lang=ru&units=metric&q=`;
+    const _url_coord = `https://api.openweathermap.org/data/2.5/weather?`
 
     const getData = async(query) => {
         const res = await request(`${_url}${query}`);
@@ -22,6 +23,11 @@ const useWeatherService = () => {
         return res
     }
 
+    const cloneGetCities = async({lat, lon}) => {
+        const res = await request(`${_url_coord}lat=${lat}&lon=${lon}&appid=${_apiKey}&units=metric&lang=ru`);
+        return res
+    }
+
     const _transformCountryCities = (data, countryAbbr) => {
         let res = [];
         let dataSorted = data.filter(item => item.country === countryAbbr).sort((a,b) => a.name > b.name ? 1 : -1);
@@ -36,7 +42,7 @@ const useWeatherService = () => {
         return res
     }
 
-    return {process, setProcess, clearError, getCountries, getCities, getData}
+    return {process, setProcess, clearError, getCountries, getCities, getData, cloneGetCities}
 }
 
 

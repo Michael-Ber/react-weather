@@ -19,7 +19,6 @@ const WeatherPage = () => {
     const {getData, process, setProcess} = useWeatherService();
     const query = `${cityName},${_modifyCountryToEng(countryName, countriesArr)}`;
     const nav = useNavigate();
-
     useEffect(() => {
         if(_modifyCountryToEng(countryName, countriesArr) !== null) {
             getData(query)
