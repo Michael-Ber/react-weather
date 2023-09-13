@@ -7,13 +7,13 @@ import './cityInfo.scss';
 import setContent from '../../utils/setContent';
 
 
-const CityInfo = memo(({city, setCityCoord, process}) => {
+const CityInfo = memo(({city, process}) => {
     const [prevCity, setPrevCity] = useState({});
     const countriesAbbr = useContext(Context);
     const {countryName} = useParams();
     useEffect(() => {
         setPrevCity(city);
-        setCityCoord(city.coord);
+        // setCityCoord(city.coord);
         if(localStorage.length < 5 && city.hasOwnProperty('id')) {
             localStorage.setItem(city.city.toLowerCase(), JSON.stringify({
                 temp: city.list[0].temp,

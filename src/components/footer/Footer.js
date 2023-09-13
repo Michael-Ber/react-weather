@@ -2,16 +2,14 @@ import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import NearlyLiItem from './NearlyLiItem';
 import useWeatherService from '../../service/WeatherService';
-import { countriesAbbr } from '../../db/countriesAbbrToRu';
 import './footer.scss';
-import setContent from '../../utils/setContent';
 
 const Footer = ({cityCoord}) => {
 
     const [obj, setObj] = useState({});
     const [nearly, setNearly] = useState([]);
     const {cityName} = useParams();
-    const {getCities, process, setProcess, cloneGetCities} = useWeatherService();
+    const {cloneGetCities} = useWeatherService();
 
     useEffect(() => {
         setObj(localStorage)
@@ -29,44 +27,14 @@ const Footer = ({cityCoord}) => {
                 default: return {}
             }
         });
-        // cityCoord && cityCoord.hasOwnProperty('lat') && 
-        // getCities()
-        //     .then((res) => res.filter(item => 
-        //             ((item.coord.lon > (cityCoord.lon - 2) &&
-        //             item.coord.lon < cityCoord.lon) || 
-        //             (item.coord.lon < (cityCoord.lon + 2) &&
-        //             item.coord.lon > cityCoord.lon)) && 
-        //             ((item.coord.lat > (cityCoord.lat - 2) &&
-        //             item.coord.lat < cityCoord.lat) || 
-        //             (item.coord.lat < (cityCoord.lat + 2) &&
-        //             item.coord.lat > cityCoord.lat))
-        //         ))
-        //     .then(res => res.filter(item => item.name.match(/Oblast/g) === null))
-        //     .then(res => {
-        //         let resArr = [];
-        //         for(let j = 0; j < 4; j++) {
-        //             const item = res[Math.floor(Math.random()*res.length)];
-        //             if(resArr.length < 1) {
-        //                 resArr.push(item);
-        //             }else if(resArr.filter(elem => elem.name === item.name).length === 0) {
-        //                 resArr.push(item)
-        //             }else {
-        //                 j--;
-        //             }
-        //         }
-                
-        //         return resArr;
-                
-        //     })
-        //     .then(res =>  setNearly(res))
-        //     .then(() => setProcess('confirmed'))
-        //     .catch(e => {console.log(e); setProcess('error')})
 
         const getNearCitiesInfo = async(arr) => {
-            for await(const coord of nearlyCoordinatesArr) {
-                cloneGetCities(coord)   
-                    .then(res => setNearly(state => ([...state, res])))
-                    .catch((eer) => console.log(eer)) 
+            if(arr[0]['lat']) {
+                for await(const coord of arr) {
+                    cloneGetCities(coord)   
+                        .then(res => setNearly(state => ([...state, res])))
+                        .catch((eer) => console.log(eer)) 
+                }
             }
         }
         getNearCitiesInfo(nearlyCoordinatesArr)
@@ -112,7 +80,6 @@ const Footer = ({cityCoord}) => {
                     <div className="footer-app__nearly">
                         <h2 className="footer-app__subtitle">Ближайшие н.п:</h2>
                         <ul className="footer-app__list">
-                            {/* {setContent(process, () => nearly.map(item => <NearlyLiItem key={item.id} city={item}/>))} */}
                             {nearly && nearly.map(item => <NearlyLiItem key={item.id} city={item}/>)}
                         </ul>
                     </div>

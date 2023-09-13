@@ -6,17 +6,8 @@ import Spinner from "../spinner/Spinner";
 
 const LiItem = ({city}) => {
     const [nearlyTemp, setNearlyTemp] = useState(Math.floor(city.main.temp));
-    // const {getData} = useWeatherService();
     const countries = useContext(Context);
     const {name, sys: {country}} = city;
-    // useEffect(() => {
-    //     getData(name, country)
-    //         .then(res => _transformCity(res))
-    //         .then(res => setNearlyTemp(arr => {
-    //             return arr.filter(item => item.city === res.city).length === 0 ? [...arr, res] : [...arr]
-    //         }))
-    //         .catch(e => console.log(e))
-    // }, [])
 
     const tempClassName = (temp) => 
         temp < -27 ? 'footer-app__temp footer-app__temp_very-cold' :

@@ -1,5 +1,6 @@
+import { useEffect } from 'react';
 import { Context } from '../../service/Context';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import { countriesAbbr as abbr} from '../../db/countriesAbbrToRu';
 import ErrorBoundary from '../errorBoundary/ErrorBoundary';
 import Header from '../header/Header';
@@ -12,7 +13,17 @@ import './app.scss';
 
 
 function App() {
-	
+
+	const nav = useNavigate();
+
+	useEffect(() => {
+		if(localStorage.length > 0) {
+			const country = JSON.parse(Object.values(localStorage)[0])['country'];
+			const city = Object.keys(localStorage)[0];
+			nav(`${country}/${city}`)
+		}
+	}, [])
+
 	return (
 			<Context.Provider value={abbr}>
 				<div className="app">

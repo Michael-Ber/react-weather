@@ -23,7 +23,8 @@ const WeatherPage = () => {
         if(_modifyCountryToEng(countryName, countriesArr) !== null) {
             getData(query)
                 .then(res => {setCity(_transformCity(res)); return res})
-                .then(res => setWeatherArr(res.list.map(item => _transformData(item, res.city.timezone))))
+                .then(res => {setWeatherArr(res.list.map(item => _transformData(item, res.city.timezone))); return res})
+                .then((res) => setCityCoord(res.city.coord))
                 .then(() => setProcess('confirmed'))
                 .catch(e => { setProcess('error'); console.log(e);throw new Error(e)})
         }else {
@@ -35,7 +36,7 @@ const WeatherPage = () => {
     return (
         <div className="main-page">
             <ErrorBoundary>
-                <CityInfo city={city} setCityCoord={setCityCoord} process={process}/>
+                <CityInfo city={city} process={process}/>
             </ErrorBoundary>
             <ErrorBoundary>
                 <TodayWeather process={process} weatherArr={weatherArr[0]}/>
